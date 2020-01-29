@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "70438394860",
+    "firebase_url": "https://userlocationmaps-68441.firebaseio.com",
+    "project_id": "userlocationmaps-68441",
+    "storage_bucket": "userlocationmaps-68441.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70438394860:android:bc357859bb6c936976bec9",
+        "android_client_info": {
+          "package_name": "com.example.abhinav.userlocationmaps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70438394860-67vhicqb4gapcgpei5j13i2c2jo2uoi3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.abhinav.userlocationmaps",
+            "certificate_hash": "ea5973e339bb0cb334274fa25d96939afb1a8950"
+          }
+        },
+        {
+          "client_id": "70438394860-l74gc66aitab7oj70fmvr705ujun9ugs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm8oDHk4dp2910u7M11lAQ7YBOPSTyigE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70438394860-l74gc66aitab7oj70fmvr705ujun9ugs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
