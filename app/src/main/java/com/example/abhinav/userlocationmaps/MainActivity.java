@@ -19,7 +19,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("before","Before content view");
         setContentView(R.layout.activity_main);
+
+        Log.i("af","after content view");
         Button assetButton = findViewById(R.id.assetButton);
         Button trackButton = findViewById(R.id.trackButton);
         Button imuButton  =findViewById(R.id.imuButton);
@@ -28,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
         imuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"Coming Soon!",Toast.LENGTH_LONG).show();
+               // Toast.makeText(MainActivity.this,"Coming Soon!",Toast.LENGTH_LONG).show();
+                Log.i("IMU Button","Clicked");
+                Intent myIntent = new Intent(MainActivity.this, IMUActivity.class);
+                startActivity(myIntent);
             }
         });
         assetButton.setOnClickListener(new View.OnClickListener() {
@@ -49,4 +55,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Patrolling App</string>
+
+    <string name="welcome">Welcome to the Forest Patrolling App!</string>
+
     <string name="title_activity_maps">Patrolling App</string>
 </resources>

@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="162dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="25dp"
         android:fontFamily="Calibri"
-        android:text="Welcome to the Forest Patrolling App!"
+        android:text="@string/welcome"
         android:textAlignment="center"
         android:textColor="#FFFCFC"
         android:textSize="18sp"
@@ -49,6 +49,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="146dp"
+        android:backgroundTint="#00D31717"
         android:text="Check IMU Data" />
 
     <Button
