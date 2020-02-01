@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/imuText"
+        android:layout_width="192dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="115dp"
+        android:layout_marginBottom="31dp"
+        android:text="IMU Live Data"
+        android:textColor="@color/colorPrimary"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/xText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/xText"
+        android:layout_width="192dp"
+        android:layout_height="52dp"
+
+        android:layout_marginStart="165dp"
+        android:layout_marginTop="59dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="56dp"
+        android:hint="X"
+        app:layout_constraintBottom_toTopOf="@+id/yText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imuText" />
+
+    <TextView
+        android:id="@+id/yText"
+        android:layout_width="192dp"
+        android:layout_height="52dp"
+
+        android:layout_marginStart="165dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="48dp"
+        android:hint="Y"
+        app:layout_constraintBottom_toTopOf="@+id/zText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/xText" />
+
+    <TextView
+        android:id="@+id/zText"
+        android:layout_width="192dp"
+        android:layout_height="52dp"
+
+        android:layout_marginStart="165dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="277dp"
+        android:hint="Z"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yText" />
+
+    <TextView
+        android:id="@+id/gyroData"
+        android:layout_width="192dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="165dp"
+        android:layout_marginTop="99dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="148dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/zText" />
+
+</android.support.constraint.ConstraintLayout>
