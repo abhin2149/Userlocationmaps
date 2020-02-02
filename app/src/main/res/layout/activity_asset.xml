@@ -65,6 +65,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="177dp"
         android:ems="10"
-        android:hint="Enter Asset Name"
+        android:hint="Enter Description"
         android:inputType="textPersonName" />
 </RelativeLayout>
