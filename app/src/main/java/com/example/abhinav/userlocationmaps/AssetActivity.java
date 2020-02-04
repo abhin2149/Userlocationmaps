@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,7 +16,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -50,7 +49,6 @@ public class AssetActivity extends AppCompatActivity {
     public void getPhoto() {
 
         Intent in = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(in, 1);
 
 
@@ -104,12 +102,14 @@ public class AssetActivity extends AppCompatActivity {
                 // if internet available save to server else save to local DB
                 BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
-                Marker marker  = new Marker(UUID.randomUUID().toString()
-                        ,Double.parseDouble(latitude.getText().toString())
-                        ,Double.parseDouble(longitude.getText().toString())
-                        ,nameEditText.getText().toString()
-                        ,Calendar.getInstance().getTime().toString()
-                        ,DbBitmapUtility.getBytes(bitmap).toString());
+                Marker marker  = null;
+                    marker = new Marker(UUID.randomUUID().toString()
+                            ,Double.parseDouble(latitude.getText().toString())
+                            ,Double.parseDouble(longitude.getText().toString())
+                            ,nameEditText.getText().toString()
+                            ,Calendar.getInstance().getTime().toString()
+                            ,DbBitmapUtility.getBytes(bitmap));
+
 
                 Log.i("marker id",marker.getId());
 
@@ -137,6 +137,7 @@ public class AssetActivity extends AppCompatActivity {
                 Toast.makeText(AssetActivity.this,"Your Asset has been saved",Toast.LENGTH_LONG).show();
                 Intent myIntent = new Intent(AssetActivity.this, MainActivity.class);
                 startActivity(myIntent);
+                finish();
             }
         });
 

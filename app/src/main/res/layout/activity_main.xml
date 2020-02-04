@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
     tools:context=".MainActivity">
 
 
@@ -13,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="162dp"
         android:layout_marginEnd="25dp"
-        android:fontFamily="Open Sans"
+        android:fontFamily="Calibri"
         android:text="@string/welcome"
         android:textAlignment="center"
-        android:textColor="#FFFCFC"
-        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:translationZ="2dp" />
 
@@ -28,47 +27,44 @@
         android:id="@+id/assetButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="51dp"
-        android:layout_marginBottom="77dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/assets" />
+        android:layout_alignStart="@+id/textView2"
+        android:layout_alignTop="@+id/trackButton"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="Assets"
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="321dp"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="91dp"
-        android:contentDescription="@string/tiger_descript"
+        android:layout_marginTop="100dp"
         app:srcCompat="@drawable/tiger" />
 
     <Button
         android:id="@+id/imuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="146dp"
-        android:backgroundTint="#00D31717"
-        android:fontFamily="sans-serif"
-        android:text="@string/check_imu_data"
-        android:translationZ="2dp" />
+        android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:text="Check IMU Data" />
 
     <Button
         android:id="@+id/trackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/assetButton"
+        android:layout_alignEnd="@+id/textView2"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="-150dp"
-        android:layout_marginTop="-1dp"
-        android:layout_marginBottom="77dp"
-        android:layout_toEndOf="@+id/textView2"
-        android:fontFamily="sans-serif"
-        android:text="@string/tracking" />
+        android:layout_marginBottom="55dp"
+        android:background="@color/colorAccent"
+        android:padding="10dp"
+        android:text="Tracking"
+        android:textColor="@color/white" />
 
 </RelativeLayout>

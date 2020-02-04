@@ -16,7 +16,7 @@
         android:layout_marginEnd="115dp"
         android:layout_marginBottom="31dp"
         android:text="IMU Live Data"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/xText"
         app:layout_constraintEnd_toEndOf="parent"

@@ -22,7 +22,7 @@ public class Marker {
     private String time;
     @SerializedName("image")
     @Expose
-    private String image;
+    private byte[] image;
 
     /**
      * No args constructor for use in serialization
@@ -40,7 +40,7 @@ public class Marker {
      * @param time
      * @param longitude
      */
-    public Marker(String id, Double latitude, Double longitude, String description, String time, String image) {
+    public Marker(String id, Double latitude, Double longitude, String description, String time, byte[] image) {
         super();
         this.id = id;
         this.latitude = latitude;
@@ -90,11 +90,11 @@ public class Marker {
         this.time = time;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 

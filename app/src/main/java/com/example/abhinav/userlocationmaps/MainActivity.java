@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Asset","Clicked");
-                Intent myIntent = new Intent(MainActivity.this, AssetActivity.class);
+                Intent myIntent = new Intent(MainActivity.this, DisplayAssets.class);
                 startActivity(myIntent);
 
             }
