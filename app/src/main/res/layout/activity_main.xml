@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
 
@@ -12,10 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="162dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="162dp"
         android:layout_marginEnd="25dp"
-        android:fontFamily="Calibri"
+        android:fontFamily="Open Sans"
         android:text="@string/welcome"
         android:textAlignment="center"
         android:textColor="#FFFCFC"
@@ -27,19 +28,22 @@
         android:id="@+id/assetButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="77dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="51dp"
-        android:text="Assets" />
+        android:layout_marginBottom="77dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/assets" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="321dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="133dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="91dp"
+        android:contentDescription="@string/tiger_descript"
         app:srcCompat="@drawable/tiger" />
 
     <Button
@@ -50,7 +54,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="146dp"
         android:backgroundTint="#00D31717"
-        android:text="Check IMU Data" />
+        android:fontFamily="sans-serif"
+        android:text="@string/check_imu_data"
+        android:translationZ="2dp" />
 
     <Button
         android:id="@+id/trackButton"
@@ -62,6 +68,7 @@
         android:layout_marginTop="-1dp"
         android:layout_marginBottom="77dp"
         android:layout_toEndOf="@+id/textView2"
-        android:text="Tracking" />
+        android:fontFamily="sans-serif"
+        android:text="@string/tracking" />
 
 </RelativeLayout>

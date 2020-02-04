@@ -38,7 +38,6 @@ import java.util.Calendar;
 import java.util.UUID;
 
 public class AssetActivity extends AppCompatActivity {
-
     ImageView imageView;
     TextView latitude;
     TextView longitude;

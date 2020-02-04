@@ -4,4 +4,12 @@
     <string name="welcome">Welcome to the Forest Patrolling App!</string>
 
     <string name="title_activity_maps">Patrolling App</string>
+
+    <string name="drawer_open">Drawer Open</string>
+
+    <string name="drawer_close">Drawer Close</string>
+    <string name="assets">Assets</string>
+    <string name="check_imu_data">Check IMU Data</string>
+    <string name="tracking">Tracking</string>
+    <string name="tiger_descript">Tiger in wild</string>
 </resources>
