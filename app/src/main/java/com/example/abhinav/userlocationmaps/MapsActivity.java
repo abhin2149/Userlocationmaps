@@ -35,6 +35,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     LocationListener locationListener;
 
+    private static final float DEFAULT_ZOOM = 20f;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -82,12 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-
-
-
     }
-
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -115,9 +112,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(this,"Tracking has now started",Toast.LENGTH_LONG).show();
 
         LatLng ulocal = new LatLng(28.610, 77.037);
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(ulocal));
+        //mMap.clear();
+        //mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ulocal,15f));
         locationListener=new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -125,10 +122,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i("Location info",location.toString());
                 //progressDoalog.dismiss();
                 LatLng ulocal = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.clear();
+                //mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
+               // mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(ulocal));
-
 
                 Geocoder geocoder=new Geocoder(getApplicationContext(), Locale.getDefault());
 
@@ -136,16 +133,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     List<Address> addressList=geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
 
-                if(addressList.size()>0 && addressList!=null){
+                    if(addressList.size()>0 && addressList!=null){
 
-                    Log.i("locale",addressList.get(0).toString());
+                        Log.i("locale",addressList.get(0).toString());
 
-                    Toast.makeText(getApplicationContext(),"Street number:" + addressList.get(0).getLocality().toString() +
-                            "Postal Code:" + addressList.get(0).getPostalCode().toString()+
-                            "Address:" + addressList.get(0).getAddressLine(0).toString()+
-                            "Country:" + addressList.get(0).getCountryName().toString(),Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(),"Street number:" + addressList.get(0).getLocality().toString() +
+                                "Postal Code:" + addressList.get(0).getPostalCode().toString()+
+                                "Address:" + addressList.get(0).getAddressLine(0).toString()+
+                                "Country:" + addressList.get(0).getCountryName().toString(),Toast.LENGTH_LONG);
 
-                }
+                    }
 
 
                 }
@@ -187,15 +184,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+        } else{
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
         }
-
-        else{
-
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }
-
-
-
     }
 }
