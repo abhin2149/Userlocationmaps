@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Abhinav.iml" filepath="$PROJECT_DIR$/Abhinav.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Userlocationmaps.iml" filepath="$PROJECT_DIR$/Userlocationmaps.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

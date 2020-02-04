@@ -2,10 +2,14 @@ package com.example.abhinav.userlocationmaps;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,10 +28,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.abhinav.userlocationmaps.Models.Marker;
+import com.example.abhinav.userlocationmaps.Utils.DbBitmapUtility;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.UUID;
 
 public class AssetActivity extends AppCompatActivity {
 
@@ -38,6 +46,7 @@ public class AssetActivity extends AppCompatActivity {
     Button saveButton;
     LocationManager locationManager;
     LocationListener locationListener;
+    private SQLiteDatabase sqLiteDatabase;
 
     public void getPhoto() {
 
@@ -56,7 +65,8 @@ public class AssetActivity extends AppCompatActivity {
 
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -88,17 +98,46 @@ public class AssetActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.nameEditText);
         latitude.setText(String.format("%.3f", 28.610));
         longitude.setText(String.format("%.3f", 77.037));
-
+        sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(AssetActivity.this, MainActivity.class);
-                startActivity(myIntent);
+                // if internet available save to server else save to local DB
+                BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                Marker marker  = new Marker(UUID.randomUUID().toString()
+                        ,Double.parseDouble(latitude.getText().toString())
+                        ,Double.parseDouble(longitude.getText().toString())
+                        ,nameEditText.getText().toString()
+                        ,Calendar.getInstance().getTime().toString()
+                        ,DbBitmapUtility.getBytes(bitmap).toString());
+
+                Log.i("marker id",marker.getId());
+
+                sqLiteDatabase.beginTransaction();
+                try {
+                    ContentValues values = new ContentValues();
+                    ContentValues cv = new ContentValues();
+                    cv.put("id",marker.getId());
+                    cv.put("latitude",marker.getLatitude());
+                    cv.put("longitude",marker.getLongitude());
+                    cv.put("description",marker.getDescription());
+                    cv.put("time",marker.getTime());
+                    cv.put("image",marker.getImage());
+                    sqLiteDatabase.insert("markers",null,cv);
+                    sqLiteDatabase.setTransactionSuccessful();
+                } finally {
+                    sqLiteDatabase.endTransaction();
+                    Log.i("saved","complete");
+                }
+
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference(nameEditText.getText().toString());
 
                 myRef.setValue("Latitude: "+latitude.getText().toString() + "  " + "Longitude: " + longitude.getText().toString());
                 Toast.makeText(AssetActivity.this,"Your Asset has been saved",Toast.LENGTH_LONG).show();
+                Intent myIntent = new Intent(AssetActivity.this, MainActivity.class);
+                startActivity(myIntent);
             }
         });
 
@@ -139,7 +178,7 @@ public class AssetActivity extends AppCompatActivity {
 
             }
         };
-        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
@@ -174,7 +213,7 @@ public class AssetActivity extends AppCompatActivity {
 
                 imageView.setImageBitmap(scaled);
 
-                Log.i("work","done");
+
 
             } catch (IOException e) {
 
