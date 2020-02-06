@@ -6,8 +6,8 @@ Follow these steps to commit to this project:
    3) Push your new branch
    4) Assign me to review the Pull Request (PR) and I will then merge the changes
    
-Team Name - Neurally Efficient
-Project Code - DS164
-Team Leader - Akhil Vaid
+Team Name - Neurally Efficient <br />
+Project Code - DS164 <br />
+Team Leader - Akhil Vaid <br />
 
 Happy Coding!
