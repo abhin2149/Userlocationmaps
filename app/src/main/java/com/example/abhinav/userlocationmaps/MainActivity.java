@@ -1,15 +1,35 @@
 package com.example.abhinav.userlocationmaps;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.abhinav.userlocationmaps.Models.Marker;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.gson.JsonObject;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,11 +45,17 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         //initialize database
 
-
-
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
 
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS markers (" +
+                "id VARCHAR PRIMARY KEY, " +
+                "latitude FLOAT, " +
+                "longitude FLOAT, " +
+                "description VARCHAR, " +
+                "time VARCHAR, " +
+                "image BLOB)");
+
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS local_markers (" +
                 "id VARCHAR PRIMARY KEY, " +
                 "latitude FLOAT, " +
                 "longitude FLOAT, " +
@@ -52,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
         //Code to read from database
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM markers", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
 
         int idIndex = cursor.getColumnIndex("id");
         int latitudeIndex = cursor.getColumnIndex("latitude");
@@ -63,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         cursor.moveToFirst();
         Log.i("records",cursor.getCount()+"  ");
+        //Marker marker = new Marker();
         while(!cursor.isAfterLast()) {
             Log.i("id",cursor.getString(idIndex)+"");
             Log.i("latitude",cursor.getFloat(latitudeIndex)+"");
@@ -70,9 +97,39 @@ public class MainActivity extends AppCompatActivity {
             Log.i("description",cursor.getString(descriptionIndex)+"");
             Log.i("time",cursor.getString(timeIndex)+"");
             Log.i("image",cursor.getBlob(imageIndex)+"");
+/*
+            marker.setId(cursor.getString(idIndex));
+            marker.setDescription(cursor.getString(descriptionIndex));
+            marker.setImage(cursor.getBlob(imageIndex));
+            marker.setLatitude(cursor.getDouble(latitudeIndex));
+            marker.setLongitude(cursor.getDouble(longitudeIndex));
+            marker.setTime(cursor.getString(timeIndex));*/
             cursor.moveToNext();
         }
         cursor.close();
+       /* FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference().child(preferences.getString("id","assets"));
+        marker.setImage(null);
+        myRef.push().setValue(marker);*/
+
+
+        // Download files from Storage
+
+        /*StorageReference storage = FirebaseStorage.getInstance().getReference().child("Images").child("2071");
+
+        File rootPath = new File(Environment.getExternalStorageDirectory(), "images");
+        if(!rootPath.exists()) {
+            rootPath.mkdirs();
+        }
+        final File localFile = new File(rootPath,"image.jpg");
+        storage.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                Log.i("downloaded", Uri.fromFile(localFile).toString());
+            }
+        });*/
+
+
     }
 
     @Override
@@ -80,10 +137,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
+        if(!preferences.contains("id"))
+            preferences.edit().putString("id",UUID.randomUUID().toString()).apply();
+        Log.i("id",preferences.getString("id","id"));
+
+
 
         Button assetButton = findViewById(R.id.assetButton);
         Button trackButton = findViewById(R.id.trackButton);
-        Button imuButton  =findViewById(R.id.imuButton);
+        Button imuButton  = findViewById(R.id.imuButton);
         // Write a message to the database
 
         imuButton.setOnClickListener(new View.OnClickListener() {

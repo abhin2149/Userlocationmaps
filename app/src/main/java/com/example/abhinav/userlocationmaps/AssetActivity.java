@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -26,14 +27,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.abhinav.userlocationmaps.Models.Asset;
 import com.example.abhinav.userlocationmaps.Models.Marker;
 import com.example.abhinav.userlocationmaps.Utils.DbBitmapUtility;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.UUID;
 
 public class AssetActivity extends AppCompatActivity {
@@ -44,13 +52,16 @@ public class AssetActivity extends AppCompatActivity {
     Button saveButton;
     LocationManager locationManager;
     LocationListener locationListener;
-    private SQLiteDatabase sqLiteDatabase;
+    SQLiteDatabase sqLiteDatabase;
+    Uri filePath;
+    SharedPreferences preferences;
+    DatabaseReference myRef;
+    StorageReference storage;
 
     public void getPhoto() {
 
         Intent in = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(in, 1);
-
 
     }
 
@@ -77,7 +88,6 @@ public class AssetActivity extends AppCompatActivity {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 getPhoto();
 
-
             }
         }
 
@@ -87,7 +97,7 @@ public class AssetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asset);
-
+        preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
         imageView=(ImageView) findViewById(R.id.imageView);
         latitude=findViewById(R.id.latTextView);
         saveButton=findViewById(R.id.saveButton);
@@ -102,13 +112,13 @@ public class AssetActivity extends AppCompatActivity {
                 // if internet available save to server else save to local DB
                 BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
-                Marker marker  = null;
-                    marker = new Marker(UUID.randomUUID().toString()
-                            ,Double.parseDouble(latitude.getText().toString())
-                            ,Double.parseDouble(longitude.getText().toString())
-                            ,nameEditText.getText().toString()
-                            ,Calendar.getInstance().getTime().toString()
-                            ,DbBitmapUtility.getBytes(bitmap));
+                final Marker marker;
+                marker = new Marker(UUID.randomUUID().toString()
+                        ,Double.parseDouble(latitude.getText().toString())
+                        ,Double.parseDouble(longitude.getText().toString())
+                        ,nameEditText.getText().toString()
+                        ,Calendar.getInstance().getTime().toString()
+                        ,DbBitmapUtility.getBytes(bitmap));
 
 
                 Log.i("marker id",marker.getId());
@@ -123,21 +133,45 @@ public class AssetActivity extends AppCompatActivity {
                     cv.put("description",marker.getDescription());
                     cv.put("time",marker.getTime());
                     cv.put("image",marker.getImage());
+                    sqLiteDatabase.insert("local_markers",null,cv);
                     sqLiteDatabase.insert("markers",null,cv);
                     sqLiteDatabase.setTransactionSuccessful();
+
                 } finally {
                     sqLiteDatabase.endTransaction();
-                    Log.i("saved","complete");
+                    Log.i("saved", "complete");
+                    Toast.makeText(AssetActivity.this,"Your Asset has been saved",Toast.LENGTH_LONG).show();
+                    Intent myIntent = new Intent(AssetActivity.this, MainActivity.class);
+                    startActivity(myIntent);
+                    finish();
                 }
 
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference(nameEditText.getText().toString());
 
-                myRef.setValue("Latitude: "+latitude.getText().toString() + "  " + "Longitude: " + longitude.getText().toString());
-                Toast.makeText(AssetActivity.this,"Your Asset has been saved",Toast.LENGTH_LONG).show();
-                Intent myIntent = new Intent(AssetActivity.this, MainActivity.class);
-                startActivity(myIntent);
-                finish();
+/*                myRef = FirebaseDatabase.getInstance().getReference().child("Assets");
+                storage = FirebaseStorage.getInstance().getReference().child("Images");
+                int random = new Random().nextInt(9999);
+                storage.child(""+random).putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Asset asset = new Asset();
+                        asset.setId(marker.getId());
+                        asset.setDescription(marker.getDescription());
+                        asset.setLatitude(marker.getLatitude());
+                        asset.setLongitude(marker.getLongitude());
+                        asset.setTime(marker.getTime());
+                        asset.setImage(taskSnapshot.getMetadata().getName());
+                        myRef.push().setValue(asset).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(AssetActivity.this,"Your Asset has been saved",Toast.LENGTH_LONG).show();
+                                Intent myIntent = new Intent(AssetActivity.this, MainActivity.class);
+                                startActivity(myIntent);
+                                finish();
+                            }
+                        });
+                    }
+                });*/
+
             }
         });
 
@@ -147,8 +181,9 @@ public class AssetActivity extends AppCompatActivity {
         progressDoalog.setMessage("Please wait...");
         progressDoalog.setTitle("Fetching location");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDoalog.setCancelable(false);
         // show it
-        //progressDoalog.show();
+        progressDoalog.show();
         locationManager=(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener=new LocationListener() {
             @Override
@@ -157,7 +192,7 @@ public class AssetActivity extends AppCompatActivity {
                 Log.i("Longitude",String.valueOf(location.getLongitude()));
                 latitude.setText(String.format("%.3f", location.getLatitude()));
                 longitude.setText(String.format("%.3f", location.getLongitude()));
-                //progressDoalog.dismiss();
+                progressDoalog.dismiss();
 
             }
 
@@ -188,32 +223,28 @@ public class AssetActivity extends AppCompatActivity {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             getPhoto();
         }
+    }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //locationManager.removeUpdates(locationListener);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-
         if(requestCode==1 && resultCode==RESULT_OK && data!=null ){
 
-            Uri image=data.getData();
-
+            filePath = data.getData();
             try {
 
-                Bitmap bitmap=MediaStore.Images.Media.getBitmap(this.getContentResolver(),image);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),filePath);
 
                 int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
                 Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
-
                 imageView.setImageBitmap(scaled);
-
-
 
             } catch (IOException e) {
 
