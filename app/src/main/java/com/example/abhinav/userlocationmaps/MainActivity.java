@@ -36,6 +36,59 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+class SaveLastLocationThread extends Thread
+{
+    SQLiteDatabase sqLiteDatabase;
+    Cursor cursor;
+    float lastLatitude;
+    float lastLongitude;
+
+    SaveLastLocationThread(SQLiteDatabase sqLiteDatabase){
+        this.sqLiteDatabase = sqLiteDatabase;
+    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+    public void run() {
+        while(true){
+            cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
+            int latitudeIndex = cursor.getColumnIndex("latitude");
+            int longitudeIndex = cursor.getColumnIndex("longitude");
+            cursor.moveToFirst();
+            float latitude = cursor.getFloat(latitudeIndex);
+            float longitude = cursor.getFloat(longitudeIndex);
+
+            // check for internet connection and update if required
+            if(this.isOnline() && (latitude!=lastLatitude || longitude!=lastLongitude)) {
+                // TODO write code to save to firebase database
+                // TODO save latitude and longitude to firebase server
+
+                lastLatitude = latitude;
+                lastLongitude = longitude;
+
+                Log.i("lastlocation","last location stored");
+            }else{
+                Log.i("lastlocation","last location failed due to no internet or no new location");
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
 
 public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
@@ -62,6 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 "description VARCHAR, " +
                 "time VARCHAR, " +
                 "image BLOB)");
+
+        // Anirudh code begins
+        SaveLastLocationThread saveLastLocationThread = new SaveLastLocationThread(sqLiteDatabase);
+        saveLastLocationThread.run();
+        // Anirudh code ends
+
 
         // Code to write to database
         /*sqLiteDatabase.beginTransaction();

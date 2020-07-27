@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/StudioProjects-Userlocationmaps.iml" filepath="$PROJECT_DIR$/.idea/modules/StudioProjects-Userlocationmaps.iml" group="Userlocationmaps" />
       <module fileurl="file://$PROJECT_DIR$/Userlocationmaps.iml" filepath="$PROJECT_DIR$/Userlocationmaps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Userlocationmaps-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Userlocationmaps-app.iml" group="Userlocationmaps/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
