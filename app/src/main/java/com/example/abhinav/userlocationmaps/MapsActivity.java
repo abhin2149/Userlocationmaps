@@ -3,8 +3,8 @@ package com.example.abhinav.userlocationmaps;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -16,6 +16,10 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -71,6 +75,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // ---------- List Buttons ----------------------
+        TextView ListButton1 = (TextView) findViewById(R.id.listButton1);
+
+        ListButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Asset","Clicked");
+                Intent myIntent = new Intent(MapsActivity.this, DisplayAssets.class);
+                startActivity(myIntent);
+            }
+        });
+
+
+        ImageView ListButton2 = (ImageView) findViewById(R.id.listButton2);
+
+        ListButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Asset","Clicked");
+                Intent myIntent = new Intent(MapsActivity.this, DisplayAssets.class);
+                startActivity(myIntent);
+            }
+        });
+        LinearLayout ListButton3 = (LinearLayout) findViewById(R.id.listButton3);
+
+        ListButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Asset","Clicked");
+                Intent myIntent = new Intent(MapsActivity.this, DisplayAssets.class);
+                startActivity(myIntent);
+            }
+        });
+
+
+        // ------------- List Button ends --------------------------
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -146,8 +186,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
                 }
-
-
 
 
                 catch (IOException e) {

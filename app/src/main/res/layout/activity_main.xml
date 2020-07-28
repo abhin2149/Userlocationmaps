@@ -27,11 +27,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/imuButton"
-        android:layout_marginBottom="21dp"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="View or capture new Asset"
+        android:text="@string/display_assets"
         android:textColor="@color/white" />
 
     <ImageView
@@ -42,6 +44,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="-1dp"
         android:layout_marginTop="42dp"
+        android:contentDescription="@string/tiger_watching"
         app:srcCompat="@drawable/tiger" />
 
     <Button
@@ -53,7 +56,7 @@
         android:background="@color/colorAccent"
         android:padding="10dp"
         android:layout_margin="8dp"
-        android:text="Check realtime IMU Data of Phone"
+        android:text="@string/check_realtime_imu_data_of_phone"
         android:textColor="@color/white" />
 
     <Button
@@ -63,10 +66,10 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="22dp"
         android:background="@color/colorAccent"
-        android:hint="click button to start"
+        android:hint="@string/click_button_to_start"
         android:padding="10dp"
         android:layout_margin="8dp"
-        android:text="Begin Tracking module"
+        android:text="@string/begin_tracking_module"
         android:textColor="@color/white" />
 
 </RelativeLayout>
