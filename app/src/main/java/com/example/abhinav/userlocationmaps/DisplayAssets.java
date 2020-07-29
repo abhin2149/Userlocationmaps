@@ -92,10 +92,10 @@ public class DisplayAssets extends AppCompatActivity {
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDoalog.setCancelable(false);
         progressDoalog.show();
-        // delete table markers
+        // delete table assets
         sqLiteDatabase.beginTransaction();
         try{
-            sqLiteDatabase.delete("markers",null,null);
+            sqLiteDatabase.delete("assets",null,null);
             sqLiteDatabase.setTransactionSuccessful();
         }
         finally {
@@ -138,7 +138,7 @@ public class DisplayAssets extends AppCompatActivity {
                             }
                             int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
                             Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
-                            Marker marker1 = new Marker(asset.getId(),asset.getLatitude(),asset.getLongitude(),asset.getDescription(),asset.getTime()
+                            Marker marker1 = new Marker(asset.getId(),asset.getLatitude(),asset.getLongitude(),asset.getDescription(),asset.getCategory(),asset.getTime()
                                     , DbBitmapUtility.getBytes(scaled));
                             markers.add(marker1);
                             if(pos==mData.size()-1){
@@ -153,9 +153,10 @@ public class DisplayAssets extends AppCompatActivity {
                                         cv.put("latitude",marker.getLatitude());
                                         cv.put("longitude",marker.getLongitude());
                                         cv.put("description",marker.getDescription());
+                                        cv.put("category",marker.getCategory());
                                         cv.put("time",marker.getTime());
                                         cv.put("image",marker.getImage());
-                                        sqLiteDatabase.insert("markers",null,cv);
+                                        sqLiteDatabase.insert("assets",null,cv);
                                         sqLiteDatabase.setTransactionSuccessful();
 
                                     } finally {
@@ -193,12 +194,13 @@ public class DisplayAssets extends AppCompatActivity {
         progressDoalog.setCancelable(false);
         progressDoalog.show();
         Log.i("sync","called");
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_assets", null);
 
         int idIndex = cursor.getColumnIndex("id");
         int latitudeIndex = cursor.getColumnIndex("latitude");
         int longitudeIndex = cursor.getColumnIndex("longitude");
         int descriptionIndex = cursor.getColumnIndex("description");
+        int categoryIndex = cursor.getColumnIndex("category");
         int timeIndex = cursor.getColumnIndex("time");
         int imageIndex = cursor.getColumnIndex("image");
 
@@ -215,11 +217,13 @@ public class DisplayAssets extends AppCompatActivity {
             Log.i("latitude", cursor.getDouble(latitudeIndex) + "");
             Log.i("longitude", cursor.getDouble(longitudeIndex) + "");
             Log.i("description", cursor.getString(descriptionIndex) + "");
+            Log.i("category", cursor.getString(categoryIndex) + "");
             Log.i("time", cursor.getString(timeIndex) + "");
             Log.i("image", cursor.getBlob(imageIndex) + "");
             Asset asset = new Asset();
             asset.setId(cursor.getString(idIndex));
             asset.setDescription(cursor.getString(descriptionIndex));
+            asset.setCategory(cursor.getString(categoryIndex));
             asset.setLatitude(cursor.getDouble(latitudeIndex));
             asset.setLongitude(cursor.getDouble(longitudeIndex));
             asset.setTime(cursor.getString(timeIndex));
@@ -241,7 +245,7 @@ public class DisplayAssets extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 sqLiteDatabase.beginTransaction();
                 try{
-                    sqLiteDatabase.delete("local_markers",null,null);
+                    sqLiteDatabase.delete("local_assets",null,null);
                     sqLiteDatabase.setTransactionSuccessful();
                 }
                 finally {
@@ -273,12 +277,13 @@ public class DisplayAssets extends AppCompatActivity {
         mRecyclerView.setAdapter(mAssetAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2,GridLayoutManager.VERTICAL, false));
 
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM markers", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM assets", null);
 
         int idIndex = cursor.getColumnIndex("id");
         int latitudeIndex = cursor.getColumnIndex("latitude");
         int longitudeIndex = cursor.getColumnIndex("longitude");
         int descriptionIndex = cursor.getColumnIndex("description");
+        int categoryIndex = cursor.getColumnIndex("category");
         int timeIndex = cursor.getColumnIndex("time");
         int imageIndex = cursor.getColumnIndex("image");
 
@@ -298,6 +303,7 @@ public class DisplayAssets extends AppCompatActivity {
             if(temp.length()>10)
                 result+="...";
             marker.setDescription(result);
+            marker.setCategory(cursor.getString(categoryIndex));
             marker.setImage(cursor.getBlob(imageIndex));
             marker.setLatitude(cursor.getDouble(latitudeIndex));
             marker.setLongitude(cursor.getDouble(longitudeIndex));

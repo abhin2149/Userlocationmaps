@@ -49,21 +49,33 @@ public class MainActivity extends AppCompatActivity {
 
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
 
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS markers (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS assets (" +
                 "id VARCHAR PRIMARY KEY, " +
                 "latitude FLOAT, " +
                 "longitude FLOAT, " +
                 "description VARCHAR, " +
+                "category VARCHAR, " +
                 "time VARCHAR, " +
                 "image BLOB)");
 
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS local_markers (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS local_assets (" +
                 "id VARCHAR PRIMARY KEY, " +
                 "latitude FLOAT, " +
                 "longitude FLOAT, " +
                 "description VARCHAR, " +
+                "category VARCHAR, " +
                 "time VARCHAR, " +
                 "image BLOB)");
+
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS user (" +
+                "id VARCHAR PRIMARY KEY, " +
+                "name VARCHAR, " +
+                "beat VARCHAR, " +
+                "reg_no BIGINT, " +
+                "phone_no BIGINT, " +
+                "last_latitude FLOAT, " +
+                "last_longitude FLOAT, " +
+                "time VARCHAR)");
 
         // Code to write to database
         /*sqLiteDatabase.beginTransaction();
@@ -80,12 +92,13 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
         //Code to read from database
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_assets", null);
 
         int idIndex = cursor.getColumnIndex("id");
         int latitudeIndex = cursor.getColumnIndex("latitude");
         int longitudeIndex = cursor.getColumnIndex("longitude");
         int descriptionIndex = cursor.getColumnIndex("description");
+        int categoryIndex = cursor.getColumnIndex("category");
         int timeIndex = cursor.getColumnIndex("time");
         int imageIndex = cursor.getColumnIndex("image");
 
@@ -97,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("latitude",cursor.getFloat(latitudeIndex)+"");
             Log.i("longitude",cursor.getFloat(longitudeIndex)+"");
             Log.i("description",cursor.getString(descriptionIndex)+"");
+            Log.i("category",cursor.getString(categoryIndex)+"");
             Log.i("time",cursor.getString(timeIndex)+"");
             Log.i("image",cursor.getBlob(imageIndex)+"");
 /*
@@ -140,8 +154,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
-        if(!preferences.contains("id"))
+        if(!preferences.contains("id")){
             preferences.edit().putString("id",UUID.randomUUID().toString()).apply();
+            // TODO start form activity
+        }
+
         Log.i("id",preferences.getString("id","id"));
 
         LinearLayout assetButton = findViewById(R.id.assetButton);

@@ -141,6 +141,7 @@ public class AssetActivity extends AppCompatActivity {
                         ,Double.parseDouble(latitude.getText().toString())
                         ,Double.parseDouble(longitude.getText().toString())
                         ,nameEditText.getText().toString()
+                        ,"dummy"            // TODO insert the category
                         ,Calendar.getInstance().getTime().toString()
                         ,DbBitmapUtility.getBytes(bitmap));
 
@@ -155,17 +156,19 @@ public class AssetActivity extends AppCompatActivity {
                     cv.put("latitude",marker.getLatitude());
                     cv.put("longitude",marker.getLongitude());
                     cv.put("description",marker.getDescription());
+                    cv.put("category",marker.getCategory());
                     cv.put("time",marker.getTime());
                     cv.put("image",marker.getImage());
-                    sqLiteDatabase.insert("local_markers",null,cv);
-                    sqLiteDatabase.insert("markers",null,cv);
+                    sqLiteDatabase.insert("local_assets",null,cv);
+                    sqLiteDatabase.insert("assets",null,cv);
                     sqLiteDatabase.setTransactionSuccessful();
 
                 } finally {
                     sqLiteDatabase.endTransaction();
                     Log.i("saved", "complete");
                     Toast.makeText(AssetActivity.this,"Your Asset has been saved",Toast.LENGTH_LONG).show();
-
+                    Intent myIntent = new Intent(AssetActivity.this, DisplayAssets.class);
+                    startActivity(myIntent);
                     finish();
                 }
 
@@ -263,8 +266,7 @@ public class AssetActivity extends AppCompatActivity {
 
             // BitMap is data structure of image file
             // which stor the image in memory
-            if (data.hasExtra("data"))
-            {
+            if (data.hasExtra("data")){
                 Bitmap photo = (Bitmap) data.getExtras().get("data");
                 imageView.setImageBitmap(photo);
             }
