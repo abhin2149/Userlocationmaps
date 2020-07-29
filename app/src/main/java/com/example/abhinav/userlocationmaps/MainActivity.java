@@ -52,6 +52,7 @@ class SaveLastLocationThread extends Thread
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
             int     exitValue = ipProcess.waitFor();
+            Log.i("checkinternet","internet connection checked");
             return (exitValue == 0);
         }
         catch (IOException e)          { e.printStackTrace(); }
@@ -60,35 +61,47 @@ class SaveLastLocationThread extends Thread
         return false;
     }
 
-    public void run() {
-        while(true){
-            cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
-            int latitudeIndex = cursor.getColumnIndex("latitude");
-            int longitudeIndex = cursor.getColumnIndex("longitude");
-            cursor.moveToFirst();
-            float latitude = cursor.getFloat(latitudeIndex);
-            float longitude = cursor.getFloat(longitudeIndex);
+    public void run(){
+        try {
+            while(true){
+                Log.i("lastlocation","inside the last location thread");
+                cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
+                int latitudeIndex = cursor.getColumnIndex("latitude");
+                int longitudeIndex = cursor.getColumnIndex("longitude");
 
-            // check for internet connection and update if required
-            if(this.isOnline() && (latitude!=lastLatitude || longitude!=lastLongitude)) {
-                // TODO write code to save to firebase database
-                // TODO save latitude and longitude to firebase server
+                boolean isValid = cursor.moveToLast();
+                if(!isValid){
+                    Log.i("lastlocation","location not present in the database");
+                    Thread.sleep(5000);
+                    continue;
+                }
 
-                lastLatitude = latitude;
-                lastLongitude = longitude;
+                float latitude = cursor.getFloat(latitudeIndex);
+                float longitude = cursor.getFloat(longitudeIndex);
 
-                Log.i("lastlocation","last location stored");
-            }else{
-                Log.i("lastlocation","last location failed due to no internet or no new location");
+                // check for internet connection and update if required
+                if(this.isOnline() && (latitude!=lastLatitude || longitude!=lastLongitude)) {
+                    // TODO write code to save to firebase database
+                    // TODO save latitude and longitude to firebase server
+
+                    lastLatitude = latitude;
+                    lastLongitude = longitude;
+
+                    Log.i("lastlocation","last location stored");
+                    Thread.sleep(20000);
+                }else {
+                    Log.i("lastlocation", "last location failed due to no internet or no new location");
+                    Thread.sleep(5000);
+                }
             }
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
+
+
+
 
 public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
@@ -118,7 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Anirudh code begins
         SaveLastLocationThread saveLastLocationThread = new SaveLastLocationThread(sqLiteDatabase);
-        saveLastLocationThread.run();
+        saveLastLocationThread.setDaemon(true);
+        saveLastLocationThread.start();
+
         // Anirudh code ends
 
 
@@ -234,6 +249,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+
+//        sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
+
     }
 
 
