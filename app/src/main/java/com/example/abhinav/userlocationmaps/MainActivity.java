@@ -36,72 +36,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-class SaveLastLocationThread extends Thread
-{
-    SQLiteDatabase sqLiteDatabase;
-    Cursor cursor;
-    float lastLatitude;
-    float lastLongitude;
-
-    SaveLastLocationThread(SQLiteDatabase sqLiteDatabase){
-        this.sqLiteDatabase = sqLiteDatabase;
-    }
-
-    public boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            Log.i("checkinternet","internet connection checked");
-            return (exitValue == 0);
-        }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
-
-        return false;
-    }
-
-    public void run(){
-        try {
-            while(true){
-                Log.i("lastlocation","inside the last location thread");
-                cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
-                int latitudeIndex = cursor.getColumnIndex("latitude");
-                int longitudeIndex = cursor.getColumnIndex("longitude");
-
-                boolean isValid = cursor.moveToLast();
-                if(!isValid){
-                    Log.i("lastlocation","location not present in the database");
-                    Thread.sleep(5000);
-                    continue;
-                }
-
-                float latitude = cursor.getFloat(latitudeIndex);
-                float longitude = cursor.getFloat(longitudeIndex);
-
-                // check for internet connection and update if required
-                if(this.isOnline() && (latitude!=lastLatitude || longitude!=lastLongitude)) {
-                    // TODO write code to save to firebase database
-                    // TODO save latitude and longitude to firebase server
-
-                    lastLatitude = latitude;
-                    lastLongitude = longitude;
-
-                    Log.i("lastlocation","last location stored");
-                    Thread.sleep(20000);
-                }else {
-                    Log.i("lastlocation", "last location failed due to no internet or no new location");
-                    Thread.sleep(5000);
-                }
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-
-
 
 public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
@@ -128,14 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 "description VARCHAR, " +
                 "time VARCHAR, " +
                 "image BLOB)");
-
-        // Anirudh code begins
-        SaveLastLocationThread saveLastLocationThread = new SaveLastLocationThread(sqLiteDatabase);
-        saveLastLocationThread.setDaemon(true);
-        saveLastLocationThread.start();
-
-        // Anirudh code ends
-
 
         // Code to write to database
         /*sqLiteDatabase.beginTransaction();
@@ -249,9 +175,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
-
-//        sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
-
     }
 
 
