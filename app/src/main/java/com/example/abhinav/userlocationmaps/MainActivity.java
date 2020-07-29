@@ -44,6 +44,7 @@ class SaveLastLocationThread extends Thread
     Cursor cursor;
     float lastLatitude;
     float lastLongitude;
+    String timestamp;
 
     SaveLastLocationThread(SQLiteDatabase sqLiteDatabase){
         this.sqLiteDatabase = sqLiteDatabase;
@@ -67,9 +68,21 @@ class SaveLastLocationThread extends Thread
         try {
             while(true){
                 Log.i("lastlocation","inside the last location thread");
-                cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_markers", null);
-                int latitudeIndex = cursor.getColumnIndex("latitude");
-                int longitudeIndex = cursor.getColumnIndex("longitude");
+                cursor = sqLiteDatabase.rawQuery("SELECT * FROM user", null);
+
+                /*"id VARCHAR PRIMARY KEY, " +
+                        "name VARCHAR, " +
+                        "beat VARCHAR, " +
+                        "reg_no BIGINT, " +
+                        "phone_no BIGINT, " +
+                        "last_latitude FLOAT, " +
+                        "last_longitude FLOAT, " +
+                        "time VARCHAR)");*/
+
+                int latitudeIndex = cursor.getColumnIndex("last_latitude");
+                int longitudeIndex = cursor.getColumnIndex("last_longitude");
+                int timeIndex = cursor.getColumnIndex("time");
+
 
                 boolean isValid = cursor.moveToLast();
                 if(!isValid){
@@ -80,16 +93,15 @@ class SaveLastLocationThread extends Thread
 
                 float latitude = cursor.getFloat(latitudeIndex);
                 float longitude = cursor.getFloat(longitudeIndex);
+                timestamp = cursor.getString(timeIndex);
 
                 // check for internet connection and update if required
                 if(this.isOnline() && (latitude!=lastLatitude || longitude!=lastLongitude)) {
                     // TODO write code to save to firebase database
-                    // TODO save latitude and longitude to firebase server
-
                     lastLatitude = latitude;
                     lastLongitude = longitude;
 
-                    Log.i("lastlocation","last location stored");
+                    Log.i("lastlocation","last location stored" + " " + latitude + " " + longitude + " " + timestamp );
                     Thread.sleep(20000);
                 }else {
                     Log.i("lastlocation", "last location failed due to no internet or no new location");
@@ -107,6 +119,7 @@ class SaveLastLocationThread extends Thread
 
 public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
+    private int id;
 
     @Override
     protected void onStart() {
@@ -143,6 +156,13 @@ public class MainActivity extends AppCompatActivity {
                 "last_latitude FLOAT, " +
                 "last_longitude FLOAT, " +
                 "time VARCHAR)");
+
+
+
+        SaveLastLocationThread saveLastLocationThread = new SaveLastLocationThread(sqLiteDatabase);
+        saveLastLocationThread.setDaemon(true);
+        saveLastLocationThread.start();
+
 
         // Code to write to database
         /*sqLiteDatabase.beginTransaction();
