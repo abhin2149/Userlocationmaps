@@ -6,48 +6,55 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/forest_bkgnd5"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+
+        android:focusable="auto"
+        android:scaleType="fitXY"
+        />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="31dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="40dp"
+        android:layout_marginBottom="31dp"
         android:clickable="true"
         android:focusable="true"
         android:onClick="add_asset"
         android:padding="20dp"
-        app:srcCompat="@drawable/add" />
+        app:srcCompat="@drawable/ic_add" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="28sp"
-            android:textColor="#000000"
-            android:padding="8dp"
-            android:text="Assets"
-            />
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:title="@string/assets_list" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/assets_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true">
+            android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
 
 
     </LinearLayout>
-
-
 
 
 </RelativeLayout>

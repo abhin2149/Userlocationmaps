@@ -1,4 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_5"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+
+            android:focusable="auto"
+            android:scaleType="fitXY"
+            android:src="@drawable/forest_bkgnd2" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:scrollingCache="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00BE2020"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing_mlarge"
+                android:paddingRight="@dimen/spacing_mlarge">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_xlarge" />
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="41dp"
+
+                    android:background="@drawable/ic_person"
+                    android:contentDescription="logo" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_large" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_mlarge" />
+
+                <LinearLayout
+                    android:layout_width="305dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="45dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="135dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#03000000"
+                        android:visibility="visible"
+                        app:cardCornerRadius="1dp"
+                        app:cardElevation="1dp"
+                        app:cardUseCompatPadding="true">
+
+
+                        <LinearLayout
+                            android:id="@+id/assetButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="166dp"
+
+                            android:background="@drawable/shadows"
+                            android:focusable="true"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_large">
+
+                            <RelativeLayout
+                                android:layout_width="35dp"
+                                android:layout_height="35dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/shape_circle_outline_2dp" />
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:layout_margin="5dp"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/ic_photo_library" />
+
+                            </RelativeLayout>
+
+                            <TextView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="50dp"
+                                android:layout_marginBottom="@dimen/spacing_medium"
+                                android:text="Assets"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                android:textColor="@color/dash_board_card_text"
+                                app:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <View
+                        android:layout_width="@dimen/spacing_large"
+                        android:layout_height="0dp" />
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="135dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#02000000"
+                        android:visibility="visible"
+                        app:cardCornerRadius="1dp"
+                        app:cardElevation="1dp"
+
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:id="@+id/trackButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="164dp"
+                            android:animationCache="false"
+                            android:background="@drawable/shadows"
+
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_large">
+
+                            <RelativeLayout
+                                android:layout_width="35dp"
+                                android:layout_height="35dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/shape_circle_outline_2dp" />
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:layout_margin="7dp"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/ic_directions_bike" />
+
+                            </RelativeLayout>
+
+
+                            <TextView
+
+                                android:layout_width="100dp"
+                                android:layout_height="64dp"
+                                android:layout_marginTop="50dp"
+                                android:layout_marginBottom="@dimen/spacing_medium"
+                                android:text="Start Tracking"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                android:textColor="@color/dash_board_card_text"
+                                app:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_large" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="45dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="135dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#00000000"
+                        android:visibility="visible"
+                        app:cardCornerRadius="1dp"
+                        app:cardElevation="1dp"
+
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:id="@+id/imuButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shadows"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_large">
+
+                            <RelativeLayout
+                                android:layout_width="35dp"
+                                android:layout_height="35dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/shape_circle_outline_2dp" />
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:layout_margin="8dp"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/ic_show_chart" />
+
+                            </RelativeLayout>
+
+
+                            <TextView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="50dp"
+                                android:layout_marginBottom="@dimen/spacing_medium"
+                                android:text="Check IMU Data"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                android:textColor="@color/dash_board_card_text"
+                                app:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <View
+                        android:layout_width="@dimen/spacing_large"
+                        android:layout_height="0dp" />
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="135dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#00000000"
+                        android:visibility="visible"
+                        app:cardCornerRadius="1dp"
+                        app:cardElevation="1dp"
+
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shadows"
+                            android:clickable="true"
+                            android:orientation="vertical"
+                            android:padding="@dimen/spacing_large">
+
+                            <RelativeLayout
+                                android:layout_width="35dp"
+                                android:layout_height="35dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/shape_circle_outline_2dp" />
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerInParent="true"
+                                    android:layout_margin="7dp"
+                                    android:paddingTop="2dp"
+                                    android:tint="@color/dash_board_card_img"
+                                    app:srcCompat="@drawable/ic_chat_outline" />
+
+                            </RelativeLayout>
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="50dp"
+                                android:layout_marginBottom="@dimen/spacing_medium"
+                                android:text="Contact Support"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                                android:textColor="@color/dash_board_card_text"
+                                app:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </RelativeLayout>
+</LinearLayout>
+<!--
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_xxlarge"
+        android:background="@android:color/white"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:tabIndicatorHeight="0dp"
+        app:tabMode="fixed"
+        app:theme="@style/Toolbar.Light" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/bg_gradient_very_soft" />
+
+</LinearLayout>
+
+
+// abhinav code below
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,11 +366,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/imuButton"
-        android:layout_marginBottom="21dp"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
         android:padding="10dp"
-        android:text="View or capture new Asset"
+        android:text="@string/display_assets"
         android:textColor="@color/white" />
 
     <ImageView
@@ -42,6 +383,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="-1dp"
         android:layout_marginTop="42dp"
+        android:contentDescription="@string/tiger_watching"
         app:srcCompat="@drawable/tiger" />
 
     <Button
@@ -53,7 +395,7 @@
         android:background="@color/colorAccent"
         android:padding="10dp"
         android:layout_margin="8dp"
-        android:text="Check realtime IMU Data of Phone"
+        android:text="@string/check_realtime_imu_data_of_phone"
         android:textColor="@color/white" />
 
     <Button
@@ -63,10 +405,11 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="22dp"
         android:background="@color/colorAccent"
-        android:hint="click button to start"
+        android:hint="@string/click_button_to_start"
         android:padding="10dp"
         android:layout_margin="8dp"
-        android:text="Begin Tracking module"
+        android:text="@string/begin_tracking_module"
         android:textColor="@color/white" />
 
 </RelativeLayout>
+-->
