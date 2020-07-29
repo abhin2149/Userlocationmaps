@@ -8,12 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.example.abhinav.userlocationmaps.Models.Asset;
 import com.example.abhinav.userlocationmaps.Models.Marker;
@@ -57,13 +57,13 @@ public class DisplayAssets extends AppCompatActivity {
     public void add_asset(View v){
         Intent myIntent = new Intent(DisplayAssets.this, AssetActivity.class);
         startActivity(myIntent);
-        finish();
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.asset_menu, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -260,7 +260,9 @@ public class DisplayAssets extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_assets);
-
+        Toolbar mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         myRef = FirebaseDatabase.getInstance().getReference().child("Assets");
         storage = FirebaseStorage.getInstance().getReference().child("Images");
         mData = new ArrayList<>();
@@ -269,8 +271,7 @@ public class DisplayAssets extends AppCompatActivity {
 
         mAssetAdapter = new AssetAdapter(this,mData);
         mRecyclerView.setAdapter(mAssetAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2,GridLayoutManager.VERTICAL, false));
 
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM markers", null);
 
@@ -292,7 +293,11 @@ public class DisplayAssets extends AppCompatActivity {
             Log.i("image",cursor.getBlob(imageIndex)+"");*/
             Marker marker = new Marker();
             marker.setId(cursor.getString(idIndex));
-            marker.setDescription(cursor.getString(descriptionIndex));
+            String temp = cursor.getString(descriptionIndex);
+            String result = temp.substring(0, Math.min(temp.length(), 10));
+            if(temp.length()>10)
+                result+="...";
+            marker.setDescription(result);
             marker.setImage(cursor.getBlob(imageIndex));
             marker.setLatitude(cursor.getDouble(latitudeIndex));
             marker.setLongitude(cursor.getDouble(longitudeIndex));

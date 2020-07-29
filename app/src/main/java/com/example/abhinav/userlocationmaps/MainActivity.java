@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abhinav.userlocationmaps.Models.Marker;
@@ -142,11 +144,9 @@ public class MainActivity extends AppCompatActivity {
             preferences.edit().putString("id",UUID.randomUUID().toString()).apply();
         Log.i("id",preferences.getString("id","id"));
 
-
-
-        Button assetButton = findViewById(R.id.assetButton);
-        Button trackButton = findViewById(R.id.trackButton);
-        Button imuButton  = findViewById(R.id.imuButton);
+        LinearLayout assetButton = findViewById(R.id.assetButton);
+        LinearLayout trackButton = findViewById(R.id.trackButton);
+        LinearLayout imuButton  = findViewById(R.id.imuButton);
         // Write a message to the database
 
         imuButton.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +176,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

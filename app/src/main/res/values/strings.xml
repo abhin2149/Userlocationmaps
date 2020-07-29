@@ -12,7 +12,7 @@
     <string name="check_imu_data">Check IMU Data</string>
     <string name="tracking">Tracking</string>
     <string name="tiger_descript">Tiger in wild</string>
-    <string name="map">Map</string>
+    <string name="map">Recenter</string>
     <string name="list">List</string>
 
     <string name="display_assets">Display all assets</string>
@@ -20,4 +20,13 @@
     <string name="click_button_to_start">click button to start</string>
     <string name="begin_tracking_module">Begin Tracking module</string>
     <string name="tiger_watching">tiger_watching</string>
+    <string name="latitude_longitude">Latitude</string>
+    <string name="save">Save</string>
+    <string name="grey_person">grey person</string>
+    <string name="name">Name</string>
+    <string name="longitude">Longitude</string>
+    <string name="description">Description</string>
+    <string name="todo">TODO</string>
+    <string name="flower">flower</string>
+    <string name="assets_list">Assets List</string>
 </resources>

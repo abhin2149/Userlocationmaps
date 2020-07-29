@@ -44,8 +44,8 @@ class AssetAdapter extends RecyclerView.Adapter<AssetAdapter.ViewHolder> {
         progressDialog.show();*/
         Marker marker = mData.get(position);
         holder.descriptionTextView.setText(marker.getDescription());
-        holder.latTextView.setText("Latitude: " + marker.getLatitude().toString());
-        holder.longTextView.setText("Longitude: " +marker.getLongitude().toString());
+        holder.latTextView.setText("Lat. " + marker.getLatitude().toString());
+        holder.longTextView.setText("Long. " +marker.getLongitude().toString());
 
         holder.assetImageView.setImageBitmap(DbBitmapUtility.getImage(marker.getImage()));
 

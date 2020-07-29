@@ -167,6 +167,12 @@
     <color name="indigo_A400">#3D5AFE</color>
     <color name="indigo_A700">#304FFE</color>
 
+
+    <color name="dash_board_card_bkgd">#d2e08b</color>
+    <color name="dash_board_card_bkgd2">#ADC356</color>
+    <color name="dash_board_card_text">#1C2B23</color>
+    <color name="dash_board_card_img">#076F9B</color>
+
     <color name="cyan_50">#E0F7FA</color>
     <color name="cyan_100">#B2EBF2</color>
     <color name="cyan_200">#80DEEA</color>

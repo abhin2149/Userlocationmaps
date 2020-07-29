@@ -41,10 +41,12 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id = "@+id/map_button3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:clickable="true"
                 android:orientation="horizontal"
                 android:padding="@dimen/spacing_medium">
 
@@ -53,14 +55,16 @@
                     android:layout_width="?attr/actionBarSize"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="clickAction"
+
                     android:tint="@color/colorPrimary"
                     app:srcCompat="@drawable/ic_near_me" />
 
                 <TextView
+                    android:id = "@+id/map_button2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/map"
+
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
@@ -85,8 +89,8 @@
                     android:layout_width="?attr/actionBarSize"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:onClick="clickAction"
+
+
                     android:tint="@color/colorPrimary"
                     app:srcCompat="@drawable/ic_format_list_bulleted" />
 
@@ -94,7 +98,7 @@
                     android:id="@+id/listButton1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
+
                     android:text="@string/list"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/colorPrimary"

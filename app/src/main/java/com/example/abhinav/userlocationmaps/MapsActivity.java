@@ -36,6 +36,7 @@ import java.util.Locale;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private double lat, lon;
     LocationManager locationManager;
     LocationListener locationListener;
 
@@ -75,29 +76,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // recenter buttons ----------------------------------------
+
+        LinearLayout MapButton3 = (LinearLayout) findViewById(R.id.map_button3);
+
+        MapButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LatLng ulocal = new LatLng(lat, lon);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ulocal,15f));
+
+            }
+        });
+        // map button done- --------------------
+
+        // add button link to assets
+        View AddButton = (View) findViewById(R.id.add_button);
+
+        AddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("New asset being added ","Clicked");
+                Intent myIntent = new Intent(MapsActivity.this, AssetActivity.class);
+                startActivity(myIntent);
+                //finish();
+            }
+        });
+
+        // ----------------- done ----------
+
+
         // ---------- List Buttons ----------------------
-        TextView ListButton1 = (TextView) findViewById(R.id.listButton1);
 
-        ListButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Asset","Clicked");
-                Intent myIntent = new Intent(MapsActivity.this, DisplayAssets.class);
-                startActivity(myIntent);
-            }
-        });
-
-
-        ImageView ListButton2 = (ImageView) findViewById(R.id.listButton2);
-
-        ListButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Asset","Clicked");
-                Intent myIntent = new Intent(MapsActivity.this, DisplayAssets.class);
-                startActivity(myIntent);
-            }
-        });
         LinearLayout ListButton3 = (LinearLayout) findViewById(R.id.listButton3);
 
         ListButton3.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +173,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //progressDoalog.dismiss();
                 LatLng ulocal = new LatLng(location.getLatitude(), location.getLongitude());
                 //mMap.clear();
+                lat = location.getLatitude();
+                lon = location.getLongitude();
                 mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
                // mMap.setMyLocationEnabled(true);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(ulocal));

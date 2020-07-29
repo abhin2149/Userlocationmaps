@@ -46,8 +46,9 @@ import java.util.UUID;
 
 public class AssetActivity extends AppCompatActivity {
     ImageView imageView;
-    TextView latitude;
-    TextView longitude;
+    android.support.v7.widget.AppCompatEditText latitude;
+    android.support.v7.widget.AppCompatEditText longitude;
+    android.support.design.widget.FloatingActionButton CameraButton;
     EditText nameEditText;
     Button saveButton;
     LocationManager locationManager;
@@ -57,6 +58,7 @@ public class AssetActivity extends AppCompatActivity {
     SharedPreferences preferences;
     DatabaseReference myRef;
     StorageReference storage;
+    private static final int pic_id = 123;
 
     public void getPhoto() {
 
@@ -86,7 +88,7 @@ public class AssetActivity extends AppCompatActivity {
                 }
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                getPhoto();
+                //getPhoto();
 
             }
         }
@@ -98,14 +100,36 @@ public class AssetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asset);
         preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
-        imageView=(ImageView) findViewById(R.id.imageView);
+        imageView =  findViewById(R.id.click_image);
+        CameraButton = findViewById(R.id.cameraButton);
+
         latitude=findViewById(R.id.latTextView);
+        longitude=findViewById(R.id.lonTextView);
+
         saveButton=findViewById(R.id.saveButton);
-        longitude=findViewById(R.id.longTextView);
-        nameEditText = findViewById(R.id.nameEditText);
+        nameEditText = findViewById(R.id.description_edit);
         latitude.setText(String.format("%.3f", 28.610));
         longitude.setText(String.format("%.3f", 77.037));
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
+        // camera button --------------
+        CameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                // Create the camera_intent ACTION_IMAGE_CAPTURE
+                // it will open the camera for capture the image
+                Intent camera_intent
+                        = new Intent(MediaStore
+                        .ACTION_IMAGE_CAPTURE);
+                // Start the activity with camera_intent,
+                // and request pic id
+                startActivityForResult(camera_intent, pic_id);
+            }
+        });
+
+        //----------------
+
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,8 +165,7 @@ public class AssetActivity extends AppCompatActivity {
                     sqLiteDatabase.endTransaction();
                     Log.i("saved", "complete");
                     Toast.makeText(AssetActivity.this,"Your Asset has been saved",Toast.LENGTH_LONG).show();
-                    Intent myIntent = new Intent(AssetActivity.this, MainActivity.class);
-                    startActivity(myIntent);
+
                     finish();
                 }
 
@@ -221,7 +244,7 @@ public class AssetActivity extends AppCompatActivity {
         else{
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            getPhoto();
+           // getPhoto();
         }
     }
 
@@ -234,6 +257,18 @@ public class AssetActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == pic_id) {
+
+            // BitMap is data structure of image file
+            // which stor the image in memory
+            if (data.hasExtra("data"))
+            {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                imageView.setImageBitmap(photo);
+            }
+        }
 
         if(requestCode==1 && resultCode==RESULT_OK && data!=null ){
 
