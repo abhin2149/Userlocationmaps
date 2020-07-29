@@ -109,7 +109,7 @@ public class AssetActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // if internet available save to server else save to local DB
+                // save to local DB
                 BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
                 Bitmap bitmap = drawable.getBitmap();
                 final Marker marker;
@@ -183,7 +183,7 @@ public class AssetActivity extends AppCompatActivity {
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDoalog.setCancelable(false);
         // show it
-        progressDoalog.show();
+        //progressDoalog.show();
         locationManager=(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener=new LocationListener() {
             @Override
@@ -192,7 +192,7 @@ public class AssetActivity extends AppCompatActivity {
                 Log.i("Longitude",String.valueOf(location.getLongitude()));
                 latitude.setText(String.format("%.3f", location.getLatitude()));
                 longitude.setText(String.format("%.3f", location.getLongitude()));
-                progressDoalog.dismiss();
+                //progressDoalog.dismiss();
 
             }
 
@@ -228,7 +228,7 @@ public class AssetActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //locationManager.removeUpdates(locationListener);
+        locationManager.removeUpdates(locationListener);
     }
 
     @Override
@@ -241,7 +241,6 @@ public class AssetActivity extends AppCompatActivity {
             try {
 
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),filePath);
-
                 int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
                 Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
                 imageView.setImageBitmap(scaled);
