@@ -21,9 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,16 +43,19 @@ import com.google.firebase.storage.UploadTask;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.UUID;
 
-public class AssetActivity extends AppCompatActivity {
+public class AssetActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     ImageView imageView;
     android.support.v7.widget.AppCompatEditText latitude;
     android.support.v7.widget.AppCompatEditText longitude;
     android.support.design.widget.FloatingActionButton CameraButton;
     EditText nameEditText;
+    Spinner category;
     Button saveButton;
     LocationManager locationManager;
     LocationListener locationListener;
@@ -105,12 +111,21 @@ public class AssetActivity extends AppCompatActivity {
 
         latitude=findViewById(R.id.latTextView);
         longitude=findViewById(R.id.lonTextView);
-
+        category = findViewById(R.id.category_spinner);
         saveButton=findViewById(R.id.saveButton);
         nameEditText = findViewById(R.id.description_edit);
         latitude.setText(String.format("%.3f", 28.610));
         longitude.setText(String.format("%.3f", 77.037));
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
+
+        ArrayList<String> categories = new ArrayList<>(Arrays.asList("Animal","Bird","Reptile","Plant","Poacher","Outline"));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AssetActivity.this,
+                android.R.layout.simple_spinner_item,categories);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category.setAdapter(adapter);
+        category.setOnItemSelectedListener(this);
+
         // camera button --------------
         CameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +156,7 @@ public class AssetActivity extends AppCompatActivity {
                         ,Double.parseDouble(latitude.getText().toString())
                         ,Double.parseDouble(longitude.getText().toString())
                         ,nameEditText.getText().toString()
-                        ,"dummy"            // TODO insert the category
+                        ,category.getSelectedItem().toString()            // TODO insert the category
                         ,Calendar.getInstance().getTime().toString()
                         ,DbBitmapUtility.getBytes(bitmap));
 
@@ -288,5 +303,15 @@ public class AssetActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
