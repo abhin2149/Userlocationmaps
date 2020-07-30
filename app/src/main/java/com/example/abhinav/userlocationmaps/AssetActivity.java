@@ -65,12 +65,11 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
     DatabaseReference myRef;
     StorageReference storage;
     private static final int pic_id = 123;
+    String[] assetsCategories = { "Carnivore", "Herbivore", "Bird", "Poachers", "Plant", "Reptile", "Boundary break-in" };
 
     public void getPhoto() {
-
         Intent in = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(in, 1);
-
     }
 
     @Override
@@ -95,7 +94,6 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 //getPhoto();
-
             }
         }
 
@@ -118,7 +116,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
         longitude.setText(String.format("%.3f", 77.037));
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
 
-        ArrayList<String> categories = new ArrayList<>(Arrays.asList("Animal","Bird","Reptile","Plant","Poacher","Outline"));
+        ArrayList<String> categories = new ArrayList<>(Arrays.asList("Carnivore", "Herbivore", "Bird", "Poachers", "Plant", "Reptile", "Boundary break-in"));
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(AssetActivity.this,
                 android.R.layout.simple_spinner_item,categories);
 
@@ -307,7 +305,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        Toast.makeText(getApplicationContext(), "Selected asset: "+assetsCategories[position] ,Toast.LENGTH_SHORT).show();
     }
 
     @Override
