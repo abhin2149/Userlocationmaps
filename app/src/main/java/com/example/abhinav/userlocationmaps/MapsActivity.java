@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
@@ -47,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     LocationListener locationListener;
     private SQLiteDatabase sqLiteDatabase;
+    String id;
 
     private static final float DEFAULT_ZOOM = 20f;
 
@@ -79,7 +81,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
+        SharedPreferences preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
+        if(!preferences.contains("id")){
+            // Will never enter this block of code
+        }else{
+            this.id = preferences.getString("id","id");
+        }
 
 
 
@@ -202,11 +211,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     cv.put("last_latitude",lat);
                     cv.put("last_longitude",lon);
                     cv.put("time",timestamp);
-                    sqLiteDatabase.insert("user",null,cv);
+                    int count_updated_rows = sqLiteDatabase.update("user", cv, "id=?",new String[]{id} );
+                    Log.i("lastlocation","Count of updated rows: " + count_updated_rows);
+
                     sqLiteDatabase.setTransactionSuccessful();
                 } finally {
                     sqLiteDatabase.endTransaction();
-                    Log.i("saved","complete");
+                    Log.i("lastlocation","location updated for user " + id);
                 }
 
 

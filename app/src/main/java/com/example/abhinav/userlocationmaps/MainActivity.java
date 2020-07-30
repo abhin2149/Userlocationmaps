@@ -45,9 +45,11 @@ class SaveLastLocationThread extends Thread
     float lastLatitude;
     float lastLongitude;
     String timestamp;
+    String id;
 
-    SaveLastLocationThread(SQLiteDatabase sqLiteDatabase){
+    SaveLastLocationThread(SQLiteDatabase sqLiteDatabase,String id){
         this.sqLiteDatabase = sqLiteDatabase;
+        this.id = id;
     }
 
     public boolean isOnline() {
@@ -67,8 +69,8 @@ class SaveLastLocationThread extends Thread
     public void run(){
         try {
             while(true){
-                Log.i("lastlocation","inside the last location thread");
-                cursor = sqLiteDatabase.rawQuery("SELECT * FROM user", null);
+//                Log.i("lastlocation","inside the last location thread");
+                cursor = sqLiteDatabase.rawQuery("SELECT * FROM user where id = ?", new String[]{this.id});
 
                 /*"id VARCHAR PRIMARY KEY, " +
                         "name VARCHAR, " +
@@ -84,9 +86,9 @@ class SaveLastLocationThread extends Thread
                 int timeIndex = cursor.getColumnIndex("time");
 
 
-                boolean isValid = cursor.moveToLast();
+                boolean isValid = cursor.moveToFirst();
                 if(!isValid){
-                    Log.i("lastlocation","location not present in the database");
+                    Log.i("lastlocation","For user:" + id + "location not present in the database" + cursor.getCount());
                     Thread.sleep(5000);
                     continue;
                 }
@@ -101,10 +103,10 @@ class SaveLastLocationThread extends Thread
                     lastLatitude = latitude;
                     lastLongitude = longitude;
 
-                    Log.i("lastlocation","last location stored" + " " + latitude + " " + longitude + " " + timestamp );
+                    Log.i("lastlocation","For user:" + id  + " last location stored" + " " + latitude + " " + longitude + " " + timestamp );
                     Thread.sleep(20000);
                 }else {
-                    Log.i("lastlocation", "last location failed due to no internet or no new location");
+                    Log.i("lastlocation", "For user:" + id + " last location failed due to no internet or no new location");
                     Thread.sleep(5000);
                 }
             }
@@ -119,7 +121,7 @@ class SaveLastLocationThread extends Thread
 
 public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
-    private int id;
+    private String id;
 
     @Override
     protected void onStart() {
@@ -158,10 +160,40 @@ public class MainActivity extends AppCompatActivity {
                 "time VARCHAR)");
 
 
+        SharedPreferences preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
+        if(!preferences.contains("id")){
+            // Will never enter this block of code
+        }else{
+            this.id = preferences.getString("id","id");
+        }
 
-        SaveLastLocationThread saveLastLocationThread = new SaveLastLocationThread(sqLiteDatabase);
+        // Populate the user table with this particular user with random initial values
+        sqLiteDatabase.beginTransaction();
+        try {
+            float lat = (float) 28.21;
+            float lon  = (float) 78.63;
+            // TODO Add values for all columns for this row in the user table
+
+
+            ContentValues cv;
+            cv = new ContentValues();
+            cv.put("last_latitude",lat);
+            cv.put("last_longitude",lon);
+            cv.put("id",id);
+            sqLiteDatabase.insert("user",null,cv);
+
+            sqLiteDatabase.setTransactionSuccessful();
+        } finally {
+            sqLiteDatabase.endTransaction();
+            Log.i("lastlocation","initial location updated for user " + id);
+        }
+
+
+
+        SaveLastLocationThread saveLastLocationThread = new SaveLastLocationThread(sqLiteDatabase,this.id);
         saveLastLocationThread.setDaemon(true);
         saveLastLocationThread.start();
+
 
 
         // Code to write to database
