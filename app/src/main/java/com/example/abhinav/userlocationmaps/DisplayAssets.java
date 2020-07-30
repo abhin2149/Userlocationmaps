@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -296,7 +297,7 @@ public class DisplayAssets extends AppCompatActivity {
 
         mAssetAdapter = new AssetAdapter(this,mData);
         mRecyclerView.setAdapter(mAssetAdapter);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2,GridLayoutManager.VERTICAL, false));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM assets", null);
 
