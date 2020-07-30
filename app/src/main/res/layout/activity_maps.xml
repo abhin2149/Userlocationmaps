@@ -37,6 +37,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:backgroundTint="@color/dash_board_card_bkgd"
             android:background="@android:color/white"
             android:orientation="horizontal">
 
@@ -52,21 +53,21 @@
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/map_button"
-                    android:layout_width="?attr/actionBarSize"
+                    android:layout_width="wrap_content"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/selectableItemBackgroundBorderless"
 
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/dash_board_card_text"
                     app:srcCompat="@drawable/ic_near_me" />
 
                 <TextView
                     android:id = "@+id/map_button2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/map"
+                    android:text="   Recenter"
 
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/dash_board_card_text"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -86,12 +87,12 @@
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/listButton2"
-                    android:layout_width="?attr/actionBarSize"
+                    android:layout_width="wrap_content"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/selectableItemBackgroundBorderless"
 
 
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/dash_board_card_text"
                     app:srcCompat="@drawable/ic_format_list_bulleted" />
 
                 <TextView
@@ -99,9 +100,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    android:text="@string/list"
+                    android:text="   List"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/dash_board_card_text"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -120,7 +121,7 @@
         android:clickable="true"
         android:onClick="clickAction"
         android:tint="@android:color/white"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/dash_board_card_text"
         app:elevation="2dp"
         app:fabSize="normal"
         app:rippleColor="@color/deep_orange_400"

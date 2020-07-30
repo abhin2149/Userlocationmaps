@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -48,6 +50,9 @@ public class DisplayAssets extends AppCompatActivity {
     private AssetAdapter mAssetAdapter;
     private DatabaseReference myRef;
     private StorageReference storage;
+    LinearLayout updateButton;
+    LinearLayout syncButton;
+    FloatingActionButton fabButton;
 
     @Override
     protected void onStart() {
@@ -61,28 +66,8 @@ public class DisplayAssets extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.asset_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.update:
-                // do something
-                updateData(this);
-                return true;
-
-            case R.id.sync:
-                //do something
-                syncData();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public void updateData(final Context context){
         final ProgressDialog progressDoalog;
         progressDoalog = new ProgressDialog(DisplayAssets.this);
@@ -264,14 +249,50 @@ public class DisplayAssets extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_assets);
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         myRef = FirebaseDatabase.getInstance().getReference().child("Assets");
         storage = FirebaseStorage.getInstance().getReference().child("Images");
         mData = new ArrayList<>();
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
         mRecyclerView = findViewById(R.id.assets_recycler_view);
+        updateButton = findViewById(R.id.update_button);
+        syncButton = findViewById(R.id.sync_button);
+        fabButton = findViewById(R.id.add_asset_button);
+
+        final Context temp1 = this;
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                // Create the camera_intent ACTION_IMAGE_CAPTURE
+                // it will open the camera for capture the image
+                updateData(temp1);
+                // Start the activity with camera_intent,
+                // and request pic id
+            }
+        });
+        syncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                // Create the camera_intent ACTION_IMAGE_CAPTURE
+                // it will open the camera for capture the image
+                syncData();
+                // Start the activity with camera_intent,
+                // and request pic id
+            }
+        });
+        fabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                // Create the camera_intent ACTION_IMAGE_CAPTURE
+                // it will open the camera for capture the image
+                add_asset(v);
+                // Start the activity with camera_intent,
+                // and request pic id
+            }
+        });
+
 
         mAssetAdapter = new AssetAdapter(this,mData);
         mRecyclerView.setAdapter(mAssetAdapter);
