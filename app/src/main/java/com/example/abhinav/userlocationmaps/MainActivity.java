@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 "id VARCHAR PRIMARY KEY, " +
                 "name VARCHAR, " +
                 "beat VARCHAR, " +
-                "reg_no BIGINT, " +
-                "phone_no BIGINT, " +
+                "reg_no VARCHAR, " +
+                "phone_no VARCHAR, " +
                 "last_latitude FLOAT, " +
                 "last_longitude FLOAT, " +
                 "time VARCHAR)");
@@ -157,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
         if(!preferences.contains("id")){
             preferences.edit().putString("id",UUID.randomUUID().toString()).apply();
             // TODO start form activity
+            Toast.makeText(MainActivity.this,"Please register yourself",Toast.LENGTH_SHORT).show();
+            Intent myIntent = new Intent(MainActivity.this, UserInfoActivity.class);
+            startActivity(myIntent);
         }
 
         Log.i("id",preferences.getString("id","id"));
