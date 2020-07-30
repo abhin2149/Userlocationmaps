@@ -168,25 +168,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Populate the user table with this particular user with random initial values
-        sqLiteDatabase.beginTransaction();
-        try {
-            float lat = (float) 28.21;
-            float lon  = (float) 78.63;
-            // TODO Add values for all columns for this row in the user table
-
-
-            ContentValues cv;
-            cv = new ContentValues();
-            cv.put("last_latitude",lat);
-            cv.put("last_longitude",lon);
-            cv.put("id",id);
-            sqLiteDatabase.insert("user",null,cv);
-
-            sqLiteDatabase.setTransactionSuccessful();
-        } finally {
-            sqLiteDatabase.endTransaction();
-            Log.i("lastlocation","initial location updated for user " + id);
-        }
+//        sqLiteDatabase.beginTransaction();
+//        try {
+//            float lat = (float) 28.21;
+//            float lon  = (float) 78.63;
+//
+//
+//            ContentValues cv;
+//            cv = new ContentValues();
+//            cv.put("last_latitude",lat);
+//            cv.put("last_longitude",lon);
+//            cv.put("id",id);
+//            sqLiteDatabase.insert("user",null,cv);
+//
+//            sqLiteDatabase.setTransactionSuccessful();
+//        } finally {
+//            sqLiteDatabase.endTransaction();
+//            Log.i("lastlocation","initial location updated for user " + id);
+//        }
 
 
 

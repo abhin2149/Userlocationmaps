@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -200,9 +201,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lon = location.getLongitude();
 
                 // TODO add this lat and long to the user database
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-                LocalDateTime now = LocalDateTime.now();
-                String timestamp = dtf.format(now).toString();
+                String timestamp = Calendar.getInstance().getTime().toString();
 
                 sqLiteDatabase.beginTransaction();
                 try {
