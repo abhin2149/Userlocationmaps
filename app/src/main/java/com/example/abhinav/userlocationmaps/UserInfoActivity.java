@@ -51,7 +51,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     ContentValues cv = new ContentValues();
                     cv.put("id",user.getId());
                     cv.put("last_latitude",user.getLastLatitude());
-                    cv.put("last_longitude",user.getLasLongitude());
+                    cv.put("last_longitude",user.getLastLongitude());
                     cv.put("name",user.getName());
                     cv.put("beat",user.getBeat());
                     cv.put("reg_no",user.getRegistrationNumber());

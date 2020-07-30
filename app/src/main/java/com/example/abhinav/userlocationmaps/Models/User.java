@@ -12,7 +12,7 @@ public class User {
     private Double lastLatitude;
     @SerializedName("last_longitude")
     @Expose
-    private Double lasLongitude;
+    private Double lastLongitude;
     @SerializedName("name")
     @Expose
     private String name;
@@ -29,10 +29,10 @@ public class User {
     @Expose
     private String time;
 
-    public User(String id, Double lastLatitude, Double lasLongitude, String name, String beat, String registrationNumber, String phoneNumber, String time) {
+    public User(String id, Double lastLatitude, Double lastLongitude, String name, String beat, String registrationNumber, String phoneNumber, String time) {
         this.id = id;
         this.lastLatitude = lastLatitude;
-        this.lasLongitude = lasLongitude;
+        this.lastLongitude = lastLongitude;
         this.name = name;
         this.beat = beat;
         this.registrationNumber = registrationNumber;
@@ -56,12 +56,12 @@ public class User {
         this.lastLatitude = lastLatitude;
     }
 
-    public Double getLasLongitude() {
-        return lasLongitude;
+    public Double getLastLongitude() {
+        return lastLongitude;
     }
 
-    public void setLasLongitude(Double lasLongitude) {
-        this.lasLongitude = lasLongitude;
+    public void setLastLongitude(Double lastLongitude) {
+        this.lastLongitude = lastLongitude;
     }
 
     public String getName() {
