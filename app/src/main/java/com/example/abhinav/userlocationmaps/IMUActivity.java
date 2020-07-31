@@ -7,6 +7,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,12 +19,12 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 
-public class IMUActivity extends Activity implements SensorEventListener{
+public class IMUActivity extends AppCompatActivity implements SensorEventListener{
     ArrayList<Double> xaxis=new ArrayList<Double>();
     ArrayList<Double>yaxis=new ArrayList<Double>();
     ArrayList<Double>zaxis=new ArrayList<Double>();
 
-    private TextView xText, yText, zText, gyroData;
+    private TextView xText, yText, zText,gyroData;
     private LineGraphSeries<DataPoint> xseries;
     private LineGraphSeries<DataPoint> yseries;
     private LineGraphSeries<DataPoint> zseries;
@@ -45,6 +47,7 @@ public class IMUActivity extends Activity implements SensorEventListener{
         mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         boolean b = SM.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
         gyroSenser = SM.getDefaultSensor((Sensor.TYPE_GYROSCOPE));
+gyroData=(TextView)findViewById(R.id.textView9);
 
         if (gyroSenser == null){
             Toast.makeText(this, "Gyroscope isn't available on this device", Toast.LENGTH_SHORT).show();
@@ -56,7 +59,7 @@ public class IMUActivity extends Activity implements SensorEventListener{
             public void onSensorChanged(SensorEvent sensorEvent) {
 
                 //positive clockwise
-                //  gyroData.setText(" GYRO data : \n" +sensorEvent.values[0]+"\n "+sensorEvent.values[1]+"\n "+sensorEvent.values[2]+"\n");
+                  gyroData.setText(" GYRO data : \n" +sensorEvent.values[0]+"\n "+sensorEvent.values[1]+"\n "+sensorEvent.values[2]+"\n");
 
             }
 
@@ -92,7 +95,7 @@ public class IMUActivity extends Activity implements SensorEventListener{
         viewport.setScrollable(true);
         viewport1.setScrollable(true);
         viewport2.setScrollable(true);
-        xText = (TextView)findViewById(R.id.textView6);
+        xText = (TextView)findViewById(R.id.textView11);
         yText = (TextView)findViewById(R.id.textView7);
         zText = (TextView)findViewById(R.id.textView8);
     }
@@ -152,17 +155,17 @@ public class IMUActivity extends Activity implements SensorEventListener{
 
         //sensor acceleration
         if(sensorEvent.values[0] != 0 ) {
-            xText.setText(sensorEvent.values[0] + " m\\" + "s\u00B2");
+            xText.setText("X-AXIS : \n"+sensorEvent.values[0] + " m\\" + "s\u00B2");
             xaxis.add(new Double(Math.abs(sensorEvent.values[0])));
             if(xaxis.size()>=10000)xaxis.remove(0);
         }
         if(sensorEvent.values[1] != 0 ) {
-            yText.setText(sensorEvent.values[1] + " m\\" + "s\u00B2");
+            yText.setText("Y-AXIS : \n"+sensorEvent.values[1] + " m\\" + "s\u00B2");
             yaxis.add(new Double(Math.abs(sensorEvent.values[1])));
             if(yaxis.size()>=10000)yaxis.remove(0);
         }
         if(sensorEvent.values[2] != 0 ) {
-            zText.setText(sensorEvent.values[2] + " m\\" + "s\u00B2");
+            zText.setText("Z-AXIS : \n"+sensorEvent.values[2] + " m\\" + "s\u00B2");
             zaxis.add(new Double(Math.abs(sensorEvent.values[2])));
             if(zaxis.size()>=10000)zaxis.remove(0);
         }
