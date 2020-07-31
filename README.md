@@ -9,5 +9,10 @@ Follow these steps to commit to this project:
 Team Name - Neurally Efficient <br />
 Project Code - DS164 <br />
 Team Leader - Akhil Vaid <br />
+Team Members - Abhinav Vadhera
+             - Anirudh Goel
+             - Bhumika Gandhi
+             - Dalip Patra
+             - Vaibhav Sharma
 
 Happy Coding!
