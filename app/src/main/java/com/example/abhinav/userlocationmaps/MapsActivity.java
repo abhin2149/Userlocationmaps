@@ -2,9 +2,12 @@ package com.example.abhinav.userlocationmaps;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
@@ -12,7 +15,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -33,8 +38,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -42,7 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double lat, lon;
     LocationManager locationManager;
     LocationListener locationListener;
-    SQLiteDatabase sqLiteDatabase;
+    private SQLiteDatabase sqLiteDatabase;
+    String id;
 
     private static final float DEFAULT_ZOOM = 20f;
 
@@ -75,6 +85,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
+        SharedPreferences preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
+        if(!preferences.contains("id")){
+            // Will never enter this block of code
+        }else{
+            this.id = preferences.getString("id","id");
+        }
+
+
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -215,6 +237,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ulocal,15f));
         locationListener=new LocationListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onLocationChanged(Location location) {
 
@@ -224,9 +247,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 //mMap.clear();
                 lat = location.getLatitude();
                 lon = location.getLongitude();
+
+                // TODO add this lat and long to the user database
+                String timestamp = Calendar.getInstance().getTime().toString();
+
+                sqLiteDatabase.beginTransaction();
+                try {
+                    ContentValues cv;
+                    cv = new ContentValues();
+                    cv.put("last_latitude",lat);
+                    cv.put("last_longitude",lon);
+                    cv.put("time",timestamp);
+                    int count_updated_rows = sqLiteDatabase.update("user", cv, "id=?",new String[]{id} );
+                    Log.i("lastlocation","Count of updated rows: " + count_updated_rows);
+
+                    sqLiteDatabase.setTransactionSuccessful();
+                } finally {
+                    sqLiteDatabase.endTransaction();
+                    Log.i("lastlocation","location updated for user " + id);
+                }
+
+
+
+                // end here
+
                 mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
                // mMap.setMyLocationEnabled(true);
-                //mMap.moveCamera(CameraUpdateFactory.newLatLng(ulocal));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(ulocal));
 
                 Geocoder geocoder=new Geocoder(getApplicationContext(), Locale.getDefault());
 

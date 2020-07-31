@@ -9,10 +9,10 @@ public class User {
     private String id;
     @SerializedName("last_latitude")
     @Expose
-    private Double last_latitude;
+    private Double lastLatitude;
     @SerializedName("last_longitude")
     @Expose
-    private Double last_longitude;
+    private Double lastLongitude;
     @SerializedName("name")
     @Expose
     private String name;
@@ -21,22 +21,22 @@ public class User {
     private String beat;
     @SerializedName("reg_no")
     @Expose
-    private Integer registration_no;
+    private String registrationNumber;
     @SerializedName("phone_no")
     @Expose
-    private Integer phone_no;
+    private String phoneNumber;
     @SerializedName("time")
     @Expose
     private String time;
 
-    public User(String id, Double last_latitude, Double last_longitude, String name, String beat, Integer registration_no, Integer phone_no, String time) {
+    public User(String id, Double lastLatitude, Double lastLongitude, String name, String beat, String registrationNumber, String phoneNumber, String time) {
         this.id = id;
-        this.last_latitude = last_latitude;
-        this.last_longitude = last_longitude;
+        this.lastLatitude = lastLatitude;
+        this.lastLongitude = lastLongitude;
         this.name = name;
         this.beat = beat;
-        this.registration_no = registration_no;
-        this.phone_no = phone_no;
+        this.registrationNumber = registrationNumber;
+        this.phoneNumber = phoneNumber;
         this.time = time;
     }
 
@@ -48,20 +48,20 @@ public class User {
         this.id = id;
     }
 
-    public Double getLast_latitude() {
-        return last_latitude;
+    public Double getLastLatitude() {
+        return lastLatitude;
     }
 
-    public void setLast_latitude(Double last_latitude) {
-        this.last_latitude = last_latitude;
+    public void setLastLatitude(Double lastLatitude) {
+        this.lastLatitude = lastLatitude;
     }
 
-    public Double getLast_longitude() {
-        return last_longitude;
+    public Double getLastLongitude() {
+        return lastLongitude;
     }
 
-    public void setLast_longitude(Double last_longitude) {
-        this.last_longitude = last_longitude;
+    public void setLastLongitude(Double lastLongitude) {
+        this.lastLongitude = lastLongitude;
     }
 
     public String getName() {
@@ -80,20 +80,20 @@ public class User {
         this.beat = beat;
     }
 
-    public Integer getRegistration_no() {
-        return registration_no;
+    public String getRegistrationNumber() {
+        return registrationNumber;
     }
 
-    public void setRegistration_no(Integer registration_no) {
-        this.registration_no = registration_no;
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
     }
 
-    public Integer getPhone_no() {
-        return phone_no;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_no(Integer phone_no) {
-        this.phone_no = phone_no;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getTime() {

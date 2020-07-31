@@ -41,6 +41,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
+    private String id;
 
     @Override
     protected void onStart() {
@@ -67,15 +68,52 @@ public class MainActivity extends AppCompatActivity {
                 "time VARCHAR, " +
                 "image BLOB)");
 
+
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS user (" +
                 "id VARCHAR PRIMARY KEY, " +
                 "name VARCHAR, " +
                 "beat VARCHAR, " +
-                "reg_no BIGINT, " +
-                "phone_no BIGINT, " +
+                "reg_no VARCHAR, " +
+                "phone_no VARCHAR, " +
                 "last_latitude FLOAT, " +
                 "last_longitude FLOAT, " +
                 "time VARCHAR)");
+
+
+        SharedPreferences preferences = this.getSharedPreferences("com.example.abhinav.userlocationmaps", Context.MODE_PRIVATE);
+        if(!preferences.contains("id")){
+            // Will never enter this block of code
+        }else{
+            this.id = preferences.getString("id","id");
+        }
+
+        // Populate the user table with this particular user with random initial values
+//        sqLiteDatabase.beginTransaction();
+//        try {
+//            float lat = (float) 28.21;
+//            float lon  = (float) 78.63;
+//
+//
+//            ContentValues cv;
+//            cv = new ContentValues();
+//            cv.put("last_latitude",lat);
+//            cv.put("last_longitude",lon);
+//            cv.put("id",id);
+//            sqLiteDatabase.insert("user",null,cv);
+//
+//            sqLiteDatabase.setTransactionSuccessful();
+//        } finally {
+//            sqLiteDatabase.endTransaction();
+//            Log.i("lastlocation","initial location updated for user " + id);
+//        }
+
+
+
+        SaveLastLocationThread saveLastLocationThread = new SaveLastLocationThread(sqLiteDatabase,id);
+        saveLastLocationThread.setDaemon(true);
+        saveLastLocationThread.start();
+
+
 
         // Code to write to database
         /*sqLiteDatabase.beginTransaction();
@@ -157,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
         if(!preferences.contains("id")){
             preferences.edit().putString("id",UUID.randomUUID().toString()).apply();
             // TODO start form activity
+            Toast.makeText(MainActivity.this,"Please register yourself",Toast.LENGTH_SHORT).show();
+            Intent myIntent = new Intent(MainActivity.this, UserInfoActivity.class);
+            startActivity(myIntent);
         }
 
         Log.i("id",preferences.getString("id","id"));
@@ -192,5 +233,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+
+//        sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
+
     }
 }
