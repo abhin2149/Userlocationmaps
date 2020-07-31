@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -26,6 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -39,6 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double lat, lon;
     LocationManager locationManager;
     LocationListener locationListener;
+    SQLiteDatabase sqLiteDatabase;
 
     private static final float DEFAULT_ZOOM = 20f;
 
@@ -161,6 +165,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //progressDoalog.show();
         Toast.makeText(this,"Tracking has now started",Toast.LENGTH_LONG).show();
 
+
+        //My Work***************************************
+
+
+        sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM assets", null);
+        int idIndex = cursor.getColumnIndex("id");
+        int latitudeIndex = cursor.getColumnIndex("latitude");
+        int longitudeIndex = cursor.getColumnIndex("longitude");
+        int descriptionIndex = cursor.getColumnIndex("description");
+        int categoryIndex = cursor.getColumnIndex("category");
+        //int timeIndex = cursor.getColumnIndex("time");
+        //int imageIndex = cursor.getColumnIndex("image");
+
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast())
+        {
+            double lat = cursor.getDouble(latitudeIndex) , lng = cursor.getDouble(longitudeIndex);
+            LatLng pos = new LatLng(lat,lng);
+            String category = cursor.getString(categoryIndex),desc = cursor.getString(descriptionIndex);
+            switch (category)
+            {
+                case "Herbivore": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_herbivore)).position(pos).title(desc));
+                break;
+                case "Carnivore" :  mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_carnivore)).position(pos).title(desc));
+                break;
+                case "Plant": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_plant)).position(pos).title(desc));
+                break;
+                case "Broken break-in": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_broken_wall)).position(pos).title(desc));
+                break;
+                case "Bird": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_bird)).position(pos).title(desc));
+                break;
+                case "Poachers": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_poacher)).position(pos).title(desc));
+                break;
+                case "Reptile" : mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_reptile)).position(pos).title(desc));
+                break;
+
+                default: mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_herbivore)).position(pos).title(desc));
+            }
+            //mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.bird)).position(pos).title(desc));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        //***********************************************
+
         LatLng ulocal = new LatLng(28.610, 77.037);
         //mMap.clear();
         //mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
@@ -177,7 +226,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lon = location.getLongitude();
                 mMap.addMarker(new MarkerOptions().position(ulocal).title("You are here!"));
                // mMap.setMyLocationEnabled(true);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(ulocal));
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(ulocal));
 
                 Geocoder geocoder=new Geocoder(getApplicationContext(), Locale.getDefault());
 
