@@ -297,7 +297,7 @@ public class DisplayAssets extends AppCompatActivity {
 
         mAssetAdapter = new AssetAdapter(this,mData);
         mRecyclerView.setAdapter(mAssetAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL,false ));
 
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM assets", null);
 
@@ -321,10 +321,8 @@ public class DisplayAssets extends AppCompatActivity {
             Marker marker = new Marker();
             marker.setId(cursor.getString(idIndex));
             String temp = cursor.getString(descriptionIndex);
-            String result = temp.substring(0, Math.min(temp.length(), 10));
-            if(temp.length()>10)
-                result+="...";
-            marker.setDescription(result);
+
+            marker.setDescription(temp);
             marker.setCategory(cursor.getString(categoryIndex));
             marker.setImage(cursor.getBlob(imageIndex));
             marker.setLatitude(cursor.getDouble(latitudeIndex));
