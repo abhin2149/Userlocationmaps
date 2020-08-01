@@ -49,6 +49,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -75,8 +77,9 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
     DatabaseReference myRef;
     StorageReference storage;
     private static final int pic_id = 123;
-    String[] assetsCategories = { "Carnivore", "Herbivore", "Bird", "Poachers", "Plant", "Reptile", "Boundary break-in" };
-    int number_categors = 7;
+    String[] assetsCategories = { "Mammals", "Birds", "Reptiles","Echinoderms","Molluscs","Corals","Offence Record","Deceased animal","Diseased","Animal Droppings","Pawprints"};
+    int number_categories = assetsCategories.length;
+    int main_categories = 6;
     String selected_category = "Mammals";
     String other_text;
 
@@ -130,29 +133,30 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
         longitude.setText(String.format("%.3f", 77.037));
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
 
-//        Reptiles</item>
-//        <item>Echinoderms</item>
-//        <item>Molluscs</item>
+
 
         // TODO populate the arraylist from database
         // Populate ArrayList for Spinner objects
-        ArrayList<String> categories = new ArrayList<>(Arrays.asList("Mammals", "Birds", "Reptiles","Echinoderms","Molluscs","Corals","Offence Record"));
-
+        ArrayList<String> categories = new ArrayList<String>();
+        Collections.addAll(categories,assetsCategories);
 
         final Map<String, ArrayList<String>> category_to_subcategory = new HashMap<String, ArrayList<String>>();
-        final ArrayList<String>[] sub_categories  = new ArrayList[number_categors];
+        final ArrayList<String>[] sub_categories  = new ArrayList[number_categories];
 
 
         sub_categories[0] = new ArrayList<>((Arrays.asList("Andaman Wild Pig (Blyth)","Nicobar Wild Pig","Other")));
-        sub_categories[1]  = new ArrayList<>((Arrays.asList("Andaman Teal","Hornbill","Other")));
-        sub_categories[2] = new ArrayList<>((Arrays.asList("Crocodile","Turtle","Other")));
-        sub_categories[3] = new ArrayList<>((Arrays.asList("ABC","XYZ","Other")));
-        sub_categories[4]  = new ArrayList<>((Arrays.asList("PQRS","ABCD","Other")));
-        sub_categories[5] = new ArrayList<>((Arrays.asList("00000","11111","Other")));
-        sub_categories[6] = new ArrayList<>((Arrays.asList("123","456","Other")));
+        sub_categories[1]  = new ArrayList<>((Arrays.asList("Andaman Teal","Narcondam Hornbill","Other")));
+        sub_categories[2] = new ArrayList<>((Arrays.asList("Saltwater Crocodile","Green Sea Turtle","Other")));
+        sub_categories[3] = new ArrayList<>((Arrays.asList("Sea Cucumber","Curry Fish","Other")));
+        sub_categories[4]  = new ArrayList<>((Arrays.asList("Pine Apple Shell","Yellow Helmet","Other")));
+        sub_categories[5] = new ArrayList<>((Arrays.asList("Brush Coral","Knob Coral","Other")));
+
+        for(int i=main_categories;i<number_categories;i++){
+            sub_categories[i] = new ArrayList<>((Arrays.asList("Other")));
+        }
 
 
-        for(int i=0;i<number_categors;i++){
+        for(int i=0;i<number_categories;i++){
             category_to_subcategory.put(categories.get(i),sub_categories[i]);
         }
 
@@ -170,7 +174,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected_category = (String) parent.getItemAtPosition(position);
 //                Toast.makeText(getApplicationContext(), "Selected category: "+selected_category ,Toast.LENGTH_SHORT).show();
-                Log.i("spinnertest","Got category selected as: " + selected_category);
+                Log.i("spinnertest","Got category selected as: " + selected_category + " at position: " + position);
 
                 ArrayList<String> current_sub_category = category_to_subcategory.get(selected_category);
                 ArrayAdapter<String> sub_categories_adapter = new ArrayAdapter<String>(AssetActivity.this,
@@ -380,8 +384,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
 //        Toast.makeText(getApplicationContext(), "Selected category: "+selected_category ,Toast.LENGTH_SHORT).show();
         Log.i("spinnertest","Got sub-category selected as: " + selected_category);
 
-        if(selected_category == "Other"){
-            // TODO add a text-box
+        /*if(selected_category == "Other"){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enter the name");
             final EditText input = new EditText(this);
@@ -402,7 +405,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
                 }
             });
             builder.show();
-        }
+        }*/
     }
 
     @Override
