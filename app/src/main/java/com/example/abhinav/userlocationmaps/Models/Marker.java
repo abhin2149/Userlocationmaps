@@ -8,6 +8,9 @@ public class Marker {
     @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("latitude")
     @Expose
     private Double latitude;
@@ -20,6 +23,9 @@ public class Marker {
     @SerializedName("category")
     @Expose
     private String category;
+    @SerializedName("species")
+    @Expose
+    private String species;
     @SerializedName("time")
     @Expose
     private String time;
@@ -43,13 +49,14 @@ public class Marker {
      * @param time
      * @param longitude
      */
-    public Marker(String id, Double latitude, Double longitude, String description,String category, String time, byte[] image) {
-        super();
+    public Marker(String id, String name, Double latitude, Double longitude, String description, String category, String species, String time, byte[] image) {
         this.id = id;
+        this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.description = description;
         this.category = category;
+        this.species = species;
         this.time = time;
         this.image = image;
     }
@@ -60,6 +67,14 @@ public class Marker {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Double getLatitude() {
@@ -94,6 +109,14 @@ public class Marker {
         this.category = category;
     }
 
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
     public String getTime() {
         return time;
     }
@@ -109,5 +132,4 @@ public class Marker {
     public void setImage(byte[] image) {
         this.image = image;
     }
-
 }

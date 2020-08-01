@@ -134,16 +134,17 @@ public class DisplayAssets extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            Log.i("URI",Uri.fromFile(localFile).toString());
                             int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
                             Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
-                            Marker marker1 = new Marker(asset.getId(),asset.getLatitude(),asset.getLongitude(),asset.getDescription(),asset.getCategory(),asset.getTime()
-                                    , DbBitmapUtility.getBytes(scaled));
+
+                            Marker marker1 = new Marker(asset.getId(),asset.getName(),asset.getLatitude(),asset.getLongitude(),
+                                    asset.getDescription(),asset.getCategory(),asset.getSpecies(),asset.getTime()
+                                    ,DbBitmapUtility.getBytes(scaled));
+
                             markers.add(marker1);
                             Log.i("total",""+total[0]);
                             Log.i("available",""+available[0]);
                             if(total[0]==available[0]){
-                                Log.i("saving","locally");
                                 //save data to local
                                 for(Marker marker: markers){
                                     sqLiteDatabase.beginTransaction();
@@ -152,10 +153,12 @@ public class DisplayAssets extends AppCompatActivity {
                                         ContentValues values = new ContentValues();
                                         ContentValues cv = new ContentValues();
                                         cv.put("id",marker.getId());
+                                        cv.put("name",marker.getName());
                                         cv.put("latitude",marker.getLatitude());
                                         cv.put("longitude",marker.getLongitude());
                                         cv.put("description",marker.getDescription());
                                         cv.put("category",marker.getCategory());
+                                        cv.put("species",marker.getSpecies());
                                         cv.put("time",marker.getTime());
                                         cv.put("image",marker.getImage());
                                         sqLiteDatabase.insert("assets",null,cv);
@@ -204,10 +207,12 @@ public class DisplayAssets extends AppCompatActivity {
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_assets", null);
 
         int idIndex = cursor.getColumnIndex("id");
+        int nameIndex = cursor.getColumnIndex("name");
         int latitudeIndex = cursor.getColumnIndex("latitude");
         int longitudeIndex = cursor.getColumnIndex("longitude");
         int descriptionIndex = cursor.getColumnIndex("description");
         int categoryIndex = cursor.getColumnIndex("category");
+        int speciesIndex = cursor.getColumnIndex("species");
         int timeIndex = cursor.getColumnIndex("time");
         int imageIndex = cursor.getColumnIndex("image");
 
@@ -221,18 +226,23 @@ public class DisplayAssets extends AppCompatActivity {
         ArrayList<Asset> assets = new ArrayList<>();
         while(!cursor.isAfterLast()) {
             Log.i("id", cursor.getString(idIndex) + "");
+            Log.i("name", cursor.getString(nameIndex) + "");
             Log.i("latitude", cursor.getDouble(latitudeIndex) + "");
             Log.i("longitude", cursor.getDouble(longitudeIndex) + "");
             Log.i("description", cursor.getString(descriptionIndex) + "");
             Log.i("category", cursor.getString(categoryIndex) + "");
+            Log.i("species", cursor.getString(speciesIndex) + "");
             Log.i("time", cursor.getString(timeIndex) + "");
             Log.i("image", cursor.getBlob(imageIndex) + "");
+
             Asset asset = new Asset();
             asset.setId(cursor.getString(idIndex));
-            asset.setDescription(cursor.getString(descriptionIndex));
-            asset.setCategory(cursor.getString(categoryIndex));
+            asset.setName(cursor.getString(nameIndex));
             asset.setLatitude(cursor.getDouble(latitudeIndex));
             asset.setLongitude(cursor.getDouble(longitudeIndex));
+            asset.setDescription(cursor.getString(descriptionIndex));
+            asset.setCategory(cursor.getString(categoryIndex));
+            asset.setSpecies(cursor.getString(speciesIndex));
             asset.setTime(cursor.getString(timeIndex));
 
             final int random = new Random().nextInt(9999);
@@ -247,6 +257,7 @@ public class DisplayAssets extends AppCompatActivity {
             cursor.moveToNext();
         }
         cursor.close();
+
         myRef.push().setValue(assets).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

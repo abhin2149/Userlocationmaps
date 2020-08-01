@@ -85,6 +85,7 @@
                             android:textColorHint="@color/grey_40">
 
                             <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/nameEditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/name" />
@@ -193,7 +194,7 @@
                                 android:textColorHint="@color/grey_40">
 
                                 <android.support.v7.widget.AppCompatEditText
-                                    android:id="@+id/description_edit"
+                                    android:id="@+id/descriptionEditText"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/description" />

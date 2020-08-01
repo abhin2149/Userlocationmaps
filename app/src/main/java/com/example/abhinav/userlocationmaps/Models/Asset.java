@@ -7,6 +7,9 @@ public class Asset {
     @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("name")
+    @Expose
+    private String name;
     @SerializedName("latitude")
     @Expose
     private Double latitude;
@@ -19,6 +22,9 @@ public class Asset {
     @SerializedName("category")
     @Expose
     private String category;
+    @SerializedName("species")
+    @Expose
+    private String species;
     @SerializedName("time")
     @Expose
     private String time;
@@ -42,12 +48,15 @@ public class Asset {
      * @param time
      * @param longitude
      */
-    public Asset(String id, Double latitude, Double longitude, String description,String category, String time, String image) {
+
+    public Asset(String id, String name, Double latitude, Double longitude, String description, String category, String species, String time, String image) {
         this.id = id;
+        this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
         this.description = description;
         this.category = category;
+        this.species = species;
         this.time = time;
         this.image = image;
     }
@@ -58,6 +67,14 @@ public class Asset {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Double getLatitude() {
@@ -90,6 +107,14 @@ public class Asset {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
     public String getTime() {

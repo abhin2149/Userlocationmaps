@@ -51,8 +51,9 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
     ImageView imageView;
     android.support.v7.widget.AppCompatEditText latitude;
     android.support.v7.widget.AppCompatEditText longitude;
+    android.support.v7.widget.AppCompatEditText name;
+    android.support.v7.widget.AppCompatEditText description;
     android.support.design.widget.FloatingActionButton CameraButton;
-    EditText nameEditText;
     Spinner category;
     Button saveButton;
     LocationManager locationManager;
@@ -107,7 +108,8 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
         longitude=findViewById(R.id.lonTextView);
         category = findViewById(R.id.category_spinner);
         saveButton=findViewById(R.id.saveButton);
-        nameEditText = findViewById(R.id.description_edit);
+        name = findViewById(R.id.nameEditText);
+        description = findViewById(R.id.descriptionEditText);
         latitude.setText(String.format("%.3f", 28.610));
         longitude.setText(String.format("%.3f", 77.037));
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
@@ -147,10 +149,12 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
                 Bitmap bitmap = drawable.getBitmap();
                 final Marker marker;
                 marker = new Marker(UUID.randomUUID().toString()
+                        ,name.getText().toString()
                         ,Double.parseDouble(latitude.getText().toString())
                         ,Double.parseDouble(longitude.getText().toString())
-                        ,nameEditText.getText().toString()
-                        ,category.getSelectedItem().toString()            // TODO insert the category
+                        ,description.getText().toString()
+                        ,category.getSelectedItem().toString()
+                        ,"species"                       // TODO insert the species
                         ,Calendar.getInstance().getTime().toString()
                         ,DbBitmapUtility.getBytes(bitmap));
 
@@ -162,10 +166,12 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
                     ContentValues values = new ContentValues();
                     ContentValues cv = new ContentValues();
                     cv.put("id",marker.getId());
+                    cv.put("name",marker.getName());
                     cv.put("latitude",marker.getLatitude());
                     cv.put("longitude",marker.getLongitude());
                     cv.put("description",marker.getDescription());
                     cv.put("category",marker.getCategory());
+                    cv.put("species",marker.getSpecies());
                     cv.put("time",marker.getTime());
                     cv.put("image",marker.getImage());
                     sqLiteDatabase.insert("local_assets",null,cv);

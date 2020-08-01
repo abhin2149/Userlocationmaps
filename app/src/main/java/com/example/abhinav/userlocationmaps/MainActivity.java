@@ -56,19 +56,23 @@ public class MainActivity extends AppCompatActivity {
 
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS assets (" +
                 "id VARCHAR PRIMARY KEY, " +
+                "name VARCHAR, " +
                 "latitude FLOAT, " +
                 "longitude FLOAT, " +
                 "description VARCHAR, " +
                 "category VARCHAR, " +
+                "species VARCHAR, " +
                 "time VARCHAR, " +
                 "image BLOB)");
 
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS local_assets (" +
                 "id VARCHAR PRIMARY KEY, " +
+                "name VARCHAR, " +
                 "latitude FLOAT, " +
                 "longitude FLOAT, " +
                 "description VARCHAR, " +
                 "category VARCHAR, " +
+                "species VARCHAR, " +
                 "time VARCHAR, " +
                 "image BLOB)");
 
@@ -137,10 +141,12 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM local_assets", null);
 
         int idIndex = cursor.getColumnIndex("id");
+        int nameIndex = cursor.getColumnIndex("name");
         int latitudeIndex = cursor.getColumnIndex("latitude");
         int longitudeIndex = cursor.getColumnIndex("longitude");
         int descriptionIndex = cursor.getColumnIndex("description");
         int categoryIndex = cursor.getColumnIndex("category");
+        int speciesIndex = cursor.getColumnIndex("species");
         int timeIndex = cursor.getColumnIndex("time");
         int imageIndex = cursor.getColumnIndex("image");
 
@@ -149,10 +155,12 @@ public class MainActivity extends AppCompatActivity {
         //Marker marker = new Marker();
         while(!cursor.isAfterLast()) {
             Log.i("id",cursor.getString(idIndex)+"");
+            Log.i("name",cursor.getString(nameIndex)+"");
             Log.i("latitude",cursor.getFloat(latitudeIndex)+"");
             Log.i("longitude",cursor.getFloat(longitudeIndex)+"");
             Log.i("description",cursor.getString(descriptionIndex)+"");
             Log.i("category",cursor.getString(categoryIndex)+"");
+            Log.i("species",cursor.getString(speciesIndex)+"");
             Log.i("time",cursor.getString(timeIndex)+"");
             Log.i("image",cursor.getBlob(imageIndex)+"");
 /*
