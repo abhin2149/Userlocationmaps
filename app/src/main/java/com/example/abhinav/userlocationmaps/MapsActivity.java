@@ -215,7 +215,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
                 case "Plant": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_plant)).position(pos).title(desc));
                 break;
-                case "Broken break-in": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_broken_wall)).position(pos).title(desc));
+                case "Boundary break-in": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_broken_wall)).position(pos).title(desc));
                 break;
                 case "Bird": mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.b_w_bird)).position(pos).title(desc));
                 break;
