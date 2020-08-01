@@ -40,8 +40,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,8 +78,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
 
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -96,7 +93,6 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
                 //getPhoto();
             }
         }
-
     }
 
     @Override
@@ -280,8 +276,10 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
             // BitMap is data structure of image file
             // which stor the image in memory
             if (data.hasExtra("data")){
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                imageView.setImageBitmap(photo);
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+                imageView.setImageBitmap(scaled);
             }
         }
 

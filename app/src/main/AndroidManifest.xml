@@ -37,16 +37,20 @@
 
         <activity
             android:name=".MapsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_maps" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".AssetActivity"
+            android:screenOrientation="portrait"
             android:label="Capture Asset" />
         <activity
             android:name=".IMUActivity"
+            android:screenOrientation="portrait"
             android:label="Get IMU data" />
         <activity
             android:name=".DisplayAssets"
+            android:screenOrientation="portrait"
             android:label="Assets" />
         <activity
             android:name=".SplashActivity"
