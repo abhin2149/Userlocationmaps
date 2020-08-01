@@ -28,4 +28,13 @@
     <string name="todo">TODO</string>
     <string name="flower">flower</string>
     <string name="assets_list">Assets List</string>
+
+    <string-array name="category_array">
+        <item>Mammals</item>
+        <item>Birds</item>
+        <item>Reptiles</item>
+        <item>Echinoderms</item>
+        <item>Molluscs</item>
+        <item>Corals</item>
+    </string-array>
 </resources>

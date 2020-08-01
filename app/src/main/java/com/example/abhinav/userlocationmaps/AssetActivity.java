@@ -1,9 +1,11 @@
 package com.example.abhinav.userlocationmaps;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,8 +47,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+
+import static android.R.layout.simple_spinner_dropdown_item;
+import static android.R.layout.simple_spinner_item;
+import static android.app.PendingIntent.getActivity;
 
 public class AssetActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     ImageView imageView;
@@ -55,6 +66,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
     android.support.v7.widget.AppCompatEditText description;
     android.support.design.widget.FloatingActionButton CameraButton;
     Spinner category;
+    Spinner sub_category;
     Button saveButton;
     LocationManager locationManager;
     LocationListener locationListener;
@@ -64,7 +76,11 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
     DatabaseReference myRef;
     StorageReference storage;
     private static final int pic_id = 123;
-    String[] assetsCategories = { "Carnivore", "Herbivore", "Bird", "Poachers", "Plant", "Reptile", "Boundary break-in" };
+    String[] assetsCategories = { "Mammals", "Birds", "Reptiles","Echinoderms","Molluscs","Corals","Offence Record","Deceased animal","Diseased","Animal Droppings","Pawprints"};
+    int number_categories = assetsCategories.length;
+    int main_categories = 6;
+    String selected_category = "Mammals";
+    String other_text;
 
     public void getPhoto() {
         Intent in = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -107,6 +123,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
         latitude=findViewById(R.id.latTextView);
         longitude=findViewById(R.id.lonTextView);
         category = findViewById(R.id.category_spinner);
+        sub_category = findViewById(R.id.sub_category_spinner);
         saveButton=findViewById(R.id.saveButton);
         name = findViewById(R.id.nameEditText);
         description = findViewById(R.id.descriptionEditText);
@@ -114,13 +131,69 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
         longitude.setText(String.format("%.3f", 77.037));
         sqLiteDatabase = this.openOrCreateDatabase("OFFLINE_DATA", MODE_PRIVATE, null);
 
-        ArrayList<String> categories = new ArrayList<>(Arrays.asList("Carnivore", "Herbivore", "Bird", "Poachers", "Plant", "Reptile", "Boundary break-in"));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AssetActivity.this,
-                android.R.layout.simple_spinner_item,categories);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category.setAdapter(adapter);
-        category.setOnItemSelectedListener(this);
+
+        // TODO populate the arraylist from database
+        // Populate ArrayList for Spinner objects
+        ArrayList<String> categories = new ArrayList<String>();
+        Collections.addAll(categories,assetsCategories);
+
+        final Map<String, ArrayList<String>> category_to_subcategory = new HashMap<String, ArrayList<String>>();
+        final ArrayList<String>[] sub_categories  = new ArrayList[number_categories];
+
+
+        sub_categories[0] = new ArrayList<>((Arrays.asList("Andaman Wild Pig (Blyth)","Nicobar Wild Pig","Other")));
+        sub_categories[1]  = new ArrayList<>((Arrays.asList("Andaman Teal","Narcondam Hornbill","Other")));
+        sub_categories[2] = new ArrayList<>((Arrays.asList("Saltwater Crocodile","Green Sea Turtle","Other")));
+        sub_categories[3] = new ArrayList<>((Arrays.asList("Sea Cucumber","Curry Fish","Other")));
+        sub_categories[4]  = new ArrayList<>((Arrays.asList("Pine Apple Shell","Yellow Helmet","Other")));
+        sub_categories[5] = new ArrayList<>((Arrays.asList("Brush Coral","Knob Coral","Other")));
+
+        for(int i=main_categories;i<number_categories;i++){
+            sub_categories[i] = new ArrayList<>((Arrays.asList("Other")));
+        }
+
+
+        for(int i=0;i<number_categories;i++){
+            category_to_subcategory.put(categories.get(i),sub_categories[i]);
+        }
+
+        // Populating complete . Now create a adapter for the categories spinner
+        ArrayAdapter<String> categories_adapter = new ArrayAdapter<String>(AssetActivity.this,
+                simple_spinner_item,categories);
+
+        categories_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category.setAdapter(categories_adapter);
+
+
+        // In the event listener set instantiate the sub_category spinner
+        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected_category = (String) parent.getItemAtPosition(position);
+//                Toast.makeText(getApplicationContext(), "Selected category: "+selected_category ,Toast.LENGTH_SHORT).show();
+                Log.i("spinnertest","Got category selected as: " + selected_category + " at position: " + position);
+
+                ArrayList<String> current_sub_category = category_to_subcategory.get(selected_category);
+                ArrayAdapter<String> sub_categories_adapter = new ArrayAdapter<String>(AssetActivity.this,
+                        simple_spinner_item,current_sub_category);
+
+                sub_categories_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                sub_category.setAdapter(sub_categories_adapter);
+                sub_category.setOnItemSelectedListener(AssetActivity.this);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+//        sub_categories_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        sub_category.setAdapter(sub_categories_adapter);
+//        sub_category.setOnItemSelectedListener(this);
+
 
         // camera button --------------
         CameraButton.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +236,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
 
                 sqLiteDatabase.beginTransaction();
                 try {
+                    //TODO update the tables according to our categories
                     ContentValues values = new ContentValues();
                     ContentValues cv = new ContentValues();
                     cv.put("id",marker.getId());
@@ -309,7 +383,33 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getApplicationContext(), "Selected asset: "+assetsCategories[position] ,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "Selected asset: "+assetsCategories[position] ,Toast.LENGTH_SHORT).show();
+        String selected_category = (String) parent.getItemAtPosition(position);
+//        Toast.makeText(getApplicationContext(), "Selected category: "+selected_category ,Toast.LENGTH_SHORT).show();
+        Log.i("spinnertest","Got sub-category selected as: " + selected_category);
+
+        /*if(selected_category == "Other"){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Enter the name");
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    other_text = input.getText().toString();
+                    Log.i("spinnertest","Got other text as " + other_text);
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+        }*/
     }
 
     @Override
