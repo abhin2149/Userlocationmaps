@@ -1,9 +1,11 @@
 package com.example.abhinav.userlocationmaps;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,6 +56,7 @@ import java.util.UUID;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 import static android.R.layout.simple_spinner_item;
+import static android.app.PendingIntent.getActivity;
 
 public class AssetActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     ImageView imageView;
@@ -74,6 +78,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
     String[] assetsCategories = { "Carnivore", "Herbivore", "Bird", "Poachers", "Plant", "Reptile", "Boundary break-in" };
     int number_categors = 7;
     String selected_category = "Mammals";
+    String other_text;
 
     public void getPhoto() {
         Intent in = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -138,13 +143,13 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
         final ArrayList<String>[] sub_categories  = new ArrayList[number_categors];
 
 
-        sub_categories[0] = new ArrayList<>((Arrays.asList("Andaman Wild Pig (Blyth)","Nicobar Wild Pig")));
-        sub_categories[1]  = new ArrayList<>((Arrays.asList("Andaman Teal","Hornbill")));
-        sub_categories[2] = new ArrayList<>((Arrays.asList("Crocodile","Turtle")));
-        sub_categories[3] = new ArrayList<>((Arrays.asList("ABC","XYZ")));
-        sub_categories[4]  = new ArrayList<>((Arrays.asList("PQRS","ABCD")));
-        sub_categories[5] = new ArrayList<>((Arrays.asList("00000","11111")));
-        sub_categories[6] = new ArrayList<>((Arrays.asList("123","456")));
+        sub_categories[0] = new ArrayList<>((Arrays.asList("Andaman Wild Pig (Blyth)","Nicobar Wild Pig","Other")));
+        sub_categories[1]  = new ArrayList<>((Arrays.asList("Andaman Teal","Hornbill","Other")));
+        sub_categories[2] = new ArrayList<>((Arrays.asList("Crocodile","Turtle","Other")));
+        sub_categories[3] = new ArrayList<>((Arrays.asList("ABC","XYZ","Other")));
+        sub_categories[4]  = new ArrayList<>((Arrays.asList("PQRS","ABCD","Other")));
+        sub_categories[5] = new ArrayList<>((Arrays.asList("00000","11111","Other")));
+        sub_categories[6] = new ArrayList<>((Arrays.asList("123","456","Other")));
 
 
         for(int i=0;i<number_categors;i++){
@@ -227,6 +232,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
 
                 sqLiteDatabase.beginTransaction();
                 try {
+                    //TODO update the tables according to our categories
                     ContentValues values = new ContentValues();
                     ContentValues cv = new ContentValues();
                     cv.put("id",marker.getId());
@@ -374,7 +380,29 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
 //        Toast.makeText(getApplicationContext(), "Selected category: "+selected_category ,Toast.LENGTH_SHORT).show();
         Log.i("spinnertest","Got sub-category selected as: " + selected_category);
 
-        // TODO check which spinner got the activity
+        if(selected_category == "Other"){
+            // TODO add a text-box
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Enter the name");
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    other_text = input.getText().toString();
+                    Log.i("spinnertest","Got other text as " + other_text);
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+        }
     }
 
     @Override
