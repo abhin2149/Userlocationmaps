@@ -227,7 +227,7 @@ public class AssetActivity extends AppCompatActivity implements AdapterView.OnIt
                         ,Double.parseDouble(longitude.getText().toString())
                         ,description.getText().toString()
                         ,category.getSelectedItem().toString()
-                        ,"species"                       // TODO insert the species
+                        ,sub_category.getSelectedItem().toString()                      // TODO insert the species
                         ,Calendar.getInstance().getTime().toString()
                         ,DbBitmapUtility.getBytes(bitmap));
 
