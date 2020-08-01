@@ -1,17 +1,22 @@
 package com.example.abhinav.userlocationmaps;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +33,7 @@ import android.support.v7.widget.Toolbar;
 import com.example.abhinav.userlocationmaps.Models.Asset;
 import com.example.abhinav.userlocationmaps.Models.Marker;
 import com.example.abhinav.userlocationmaps.Utils.DbBitmapUtility;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,6 +75,7 @@ public class DisplayAssets extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
+
     public void updateData(final Context context){
         final ProgressDialog progressDoalog;
         progressDoalog = new ProgressDialog(DisplayAssets.this);
@@ -107,6 +114,8 @@ public class DisplayAssets extends AppCompatActivity {
                 if(!rootPath.exists()) {
                     rootPath.mkdirs();
                 }
+                final int[] total = {0};
+                final int[] available = {mData.size()};
                 for(int i=0;i<mData.size();i++){
                     final Asset asset = mData.get(i);
                     StorageReference imageStorage = storage.child(asset.getImage());
@@ -116,23 +125,30 @@ public class DisplayAssets extends AppCompatActivity {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             Log.i("downloaded",taskSnapshot.toString());
+                            total[0]++;
                             Bitmap bitmap = null;
+
                             try {
                                 bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(localFile));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+
+                            Log.i("URI",Uri.fromFile(localFile).toString());
                             int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
                             Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
                             Marker marker1 = new Marker(asset.getId(),asset.getLatitude(),asset.getLongitude(),asset.getDescription(),asset.getCategory(),asset.getTime()
                                     , DbBitmapUtility.getBytes(scaled));
                             markers.add(marker1);
-                            if(pos==mData.size()-1){
-
+                            Log.i("total",""+total[0]);
+                            Log.i("available",""+available[0]);
+                            if(total[0]==available[0]){
+                                Log.i("saving","locally");
                                 //save data to local
                                 for(Marker marker: markers){
                                     sqLiteDatabase.beginTransaction();
                                     try {
+                                        Log.i("saving","local");
                                         ContentValues values = new ContentValues();
                                         ContentValues cv = new ContentValues();
                                         cv.put("id",marker.getId());
@@ -156,6 +172,11 @@ public class DisplayAssets extends AppCompatActivity {
                                 startActivity(myIntent);
                                 finish();
                             }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            available[0]--;
                         }
                     });
                 }
@@ -333,5 +354,37 @@ public class DisplayAssets extends AppCompatActivity {
         }
         cursor.close();
         mAssetAdapter.notifyDataSetChanged();
+
+        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED ) {
+
+            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                        ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    Toast.makeText(DisplayAssets.this,"Please grant the required permissions",Toast.LENGTH_LONG).show();
+                    finish();
+                    return;
+                }
+                //getPhoto();
+            }
+        }
     }
 }

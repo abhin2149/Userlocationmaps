@@ -3,6 +3,7 @@ package com.example.abhinav.userlocationmaps;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.abhinav.userlocationmaps.Models.Marker;
 import com.example.abhinav.userlocationmaps.Utils.DbBitmapUtility;
 
@@ -26,19 +30,20 @@ class AssetAdapter extends RecyclerView.Adapter<AssetAdapter.ViewHolder> {
     private Context mContext;
 
 
-    public AssetAdapter(Context mContext, ArrayList<Marker> mData) {
+    AssetAdapter(Context mContext, ArrayList<Marker> mData) {
         this.mData = mData;
         this.mContext = mContext;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.asset_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         /*final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(mContext);
         progressDialog.setMax(100);
@@ -50,8 +55,9 @@ class AssetAdapter extends RecyclerView.Adapter<AssetAdapter.ViewHolder> {
         holder.descriptionTextView.setText(marker.getDescription());
         holder.latTextView.setText("Lat. " + marker.getLatitude().toString());
         holder.longTextView.setText("Long. " +marker.getLongitude().toString());
-
-        holder.assetImageView.setImageBitmap(DbBitmapUtility.getImage(marker.getImage()));
+        Glide.with(mContext).load(marker.getImage()).apply(new RequestOptions().override(500))
+                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE)).into(holder.assetImageView);
+        //holder.assetImageView.setImageBitmap(DbBitmapUtility.decodeSampledBitmapFromResource(marker.getImage(),100,200));
 
     }
     @Override
@@ -60,7 +66,7 @@ class AssetAdapter extends RecyclerView.Adapter<AssetAdapter.ViewHolder> {
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView descriptionTextView;
         TextView latTextView;
@@ -68,7 +74,7 @@ class AssetAdapter extends RecyclerView.Adapter<AssetAdapter.ViewHolder> {
         ImageView assetImageView;
         Button ReadMore;
         private Context temp  ;
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             descriptionTextView = itemView.findViewById(R.id.description_textView);
@@ -81,8 +87,7 @@ class AssetAdapter extends RecyclerView.Adapter<AssetAdapter.ViewHolder> {
 
             assetImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v){
                     Intent myIntent = new Intent(temp, AssetInfo.class);
                     myIntent.putExtra("descriptionTextView", descriptionTextView.getText().toString());
                     myIntent.putExtra("latTextView", latTextView.getText().toString());
