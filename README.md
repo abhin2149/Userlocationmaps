@@ -1,4 +1,8 @@
 # Userlocationmaps
+
+This project mainly focuses on offline syncing functionality in internet less areas and location tracking even id no GPS signal is available.
+
+
 Follow these steps to commit to this project:
 
    1) Clone the master branch
