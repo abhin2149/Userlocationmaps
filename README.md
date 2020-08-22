@@ -1,6 +1,6 @@
 # Userlocationmaps
 
-This project mainly focuses on offline syncing functionality in internet less areas and location tracking even id no GPS signal is available.
+This project mainly focuses on offline syncing functionality in internet less areas and location tracking even if no GPS signal is available.
 
 
 Follow these steps to commit to this project:
